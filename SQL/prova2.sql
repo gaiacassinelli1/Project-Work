@@ -1,0 +1,1 @@
+create table IF NOT EXISTS pippo;
