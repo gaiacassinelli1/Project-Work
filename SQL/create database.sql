@@ -1,2 +1,2 @@
-drop DATABASE IF EXISTS analisi_ansia;
-create DATABASE analisi_ansia;
+DROP DATABASE IF EXISTS ansia_db;
+CREATE DATABASE ansia_db;
