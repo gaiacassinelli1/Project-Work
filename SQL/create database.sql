@@ -1,2 +1,0 @@
-DROP DATABASE IF EXISTS ansia_db;
-CREATE DATABASE ansia_db;
