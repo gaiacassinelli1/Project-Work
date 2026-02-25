@@ -191,7 +191,7 @@ for i, riga in enumerate(righe[1:], start=2):
             riga_completa[2],     # contesto
             riga_completa[3],     # età
             riga_completa[4],     # genere
-            riga_completa[36],    # area_geo ✅ SPOSTATO QUI
+            riga_completa[36],    # area_geo 
             riga_completa[5],     # anni_esperienza
             riga_completa[6],     # Item_1
             riga_completa[7],     # Item_2
