@@ -1,0 +1,12 @@
+# Environment variables
+.env
+*.env
+
+# Google Cloud credentials
+analisi-ansia-dcecdb75c868.json
+*.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
