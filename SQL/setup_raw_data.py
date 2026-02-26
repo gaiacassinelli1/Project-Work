@@ -10,6 +10,27 @@ from google.oauth2 import service_account
 from datetime import datetime
 
 # ========================================
+# FUNZIONI HELPER
+# ========================================
+
+def converti_vuoto_in_null(valore):
+    """Converte stringhe vuote o None in NULL"""
+    if valore is None or valore == '':
+        return None
+    return valore
+
+def converti_item(valore):
+    """Converte Items: vuoti o '0' → None, altrimenti → int"""
+    if valore is None or valore == '' or valore == '0':
+        return None
+    try:
+        val_int = int(valore)
+        # Se è 0, ritorna None (celle vuote in Google Sheets)
+        return None if val_int == 0 else val_int
+    except:
+        return None
+
+# ========================================
 # 1. CONFIGURAZIONE
 # ========================================
 
@@ -84,7 +105,7 @@ CREATE TABLE raw_data (
 
 cursore.execute(query_crea_tabella)
 conn.commit()
-print("✅ Tabella raw_data creata!")
+print("✅ Tabella raw_data creata con UNIQUE constraint su (timestamp, email_indirizzo, email_app)!")
 
 cursore.close()
 conn.close()
@@ -183,47 +204,7 @@ for i, riga in enumerate(righe[1:], start=2):
             except:
                 ts = None
 
-        dati = (
-            ts,                   # timestamp
-            riga_completa[37],    # email_indirizzo
-            riga_completa[38],    # email_app
-            riga_completa[1],     # consenso
-            riga_completa[2],     # contesto
-            riga_completa[3],     # età
-            riga_completa[4],     # genere
-            riga_completa[36],    # area_geo 
-            riga_completa[5],     # anni_esperienza
-            riga_completa[6],     # Item_1
-            riga_completa[7],     # Item_2
-            riga_completa[8],     # Item_3
-            riga_completa[9],     # Item_4
-            riga_completa[10],    # Item_5
-            riga_completa[11],    # Item_6
-            riga_completa[12],    # Item_7
-            riga_completa[13],    # Item_8
-            riga_completa[14],    # Item_9
-            riga_completa[15],    # Item_10
-            riga_completa[16],    # Item_11
-            riga_completa[17],    # Item_12
-            riga_completa[18],    # Item_13
-            riga_completa[19],    # Item_14
-            riga_completa[20],    # Item_15
-            riga_completa[21],    # Item_16
-            riga_completa[22],    # Item_17
-            riga_completa[23],    # Item_18
-            riga_completa[24],    # Item_19
-            riga_completa[25],    # Item_20
-            riga_completa[26],    # Item_21
-            riga_completa[27],    # Item_22
-            riga_completa[28],    # Item_23
-            riga_completa[29],    # Item_24
-            riga_completa[30],    # Item_25
-            riga_completa[31],    # Item_26
-            riga_completa[32],    # Item_27
-            riga_completa[33],    # Item_28
-            riga_completa[34],    # Item_29
-            riga_completa[35],    # Item_30 (testo libero)
-        )
+        
 
         cursore.execute(query_insert, dati)
         inserite += 1
