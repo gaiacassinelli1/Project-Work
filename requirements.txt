@@ -13,6 +13,6 @@ pydantic==2.6.0
 mysql-connector-python==8.0.33
 firebase_admin==6.0.0
 google.oauth2
-google-auth==2.20.0
-google-auth-oauthlib==0.4.6
-googleapiclient.discovery==2.100.0
+google-auth
+google-auth-oauthlib
+googleapiclient.discovery
