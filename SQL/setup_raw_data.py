@@ -218,7 +218,7 @@ for i, riga in enumerate(righe[1:], start=2):
         saltate += 1
 
 conn.commit()
-print(f"\n✅ Importazione completata!")
+
 print(f"   - Righe inserite: {inserite}")
 print(f"   - Righe saltate: {saltate}")
 
