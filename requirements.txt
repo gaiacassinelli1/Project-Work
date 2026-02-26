@@ -1,4 +1,3 @@
-# RICORDARSI DI ATTIVARE IL VIRTUAL ENVIRONMENT PRIMA DI INSTALLARE LE DIPENDENZE
 fastapi==0.115.0
 uvicorn[standard]==0.31.0
 sqlalchemy==2.0.35
@@ -12,7 +11,8 @@ python-dotenv==1.0.0
 google-generativeai==0.8.0
 pydantic==2.6.0
 mysql-connector-python==8.0.33
-firebase_admin==7.2.0
-#google-auth==2.25.2
-#google-auth-oauthlib==1.1.0
-#google-api-python-client==2.100.0
+firebase_admin==6.0.0
+google.oauth2==2.20.0
+google-auth==2.20.0
+google-auth-oauthlib==0.4.6
+googleapiclient.discovery==2.100.0
