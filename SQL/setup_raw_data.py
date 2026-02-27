@@ -204,7 +204,47 @@ for i, riga in enumerate(righe[1:], start=2):
             except:
                 ts = None
 
-        
+        dati = (
+            ts,                                           # timestamp
+            converti_vuoto_in_null(riga_completa[37]),  # email_indirizzo
+            converti_vuoto_in_null(riga_completa[38]),  # email_app
+            converti_vuoto_in_null(riga_completa[1]),   # consenso
+            converti_vuoto_in_null(riga_completa[2]),   # contesto
+            converti_vuoto_in_null(riga_completa[3]),   # età
+            converti_vuoto_in_null(riga_completa[4]),   # genere
+            converti_vuoto_in_null(riga_completa[36]),  # area_geo
+            converti_vuoto_in_null(riga_completa[5]),   # anni_esperienza
+            converti_item(riga_completa[6]),             # Item_1
+            converti_item(riga_completa[7]),             # Item_2
+            converti_item(riga_completa[8]),             # Item_3
+            converti_item(riga_completa[9]),             # Item_4
+            converti_item(riga_completa[10]),            # Item_5
+            converti_item(riga_completa[11]),            # Item_6
+            converti_item(riga_completa[12]),            # Item_7
+            converti_item(riga_completa[13]),            # Item_8
+            converti_item(riga_completa[14]),            # Item_9
+            converti_item(riga_completa[15]),            # Item_10
+            converti_item(riga_completa[16]),            # Item_11
+            converti_item(riga_completa[17]),            # Item_12
+            converti_item(riga_completa[18]),            # Item_13
+            converti_item(riga_completa[19]),            # Item_14
+            converti_item(riga_completa[20]),            # Item_15
+            converti_item(riga_completa[21]),            # Item_16
+            converti_item(riga_completa[22]),            # Item_17
+            converti_item(riga_completa[23]),            # Item_18
+            converti_item(riga_completa[24]),            # Item_19
+            converti_item(riga_completa[25]),            # Item_20
+            converti_item(riga_completa[26]),            # Item_21
+            converti_item(riga_completa[27]),            # Item_22
+            converti_item(riga_completa[28]),            # Item_23
+            converti_item(riga_completa[29]),            # Item_24
+            converti_item(riga_completa[30]),            # Item_25
+            converti_item(riga_completa[31]),            # Item_26
+            converti_item(riga_completa[32]),            # Item_27
+            converti_item(riga_completa[33]),            # Item_28
+            converti_item(riga_completa[34]),            # Item_29
+            converti_vuoto_in_null(riga_completa[35]),  # Item_30 (testo)
+        )        
 
         cursore.execute(query_insert, dati)
         inserite += 1
@@ -218,7 +258,7 @@ for i, riga in enumerate(righe[1:], start=2):
         saltate += 1
 
 conn.commit()
-
+print(f"\n✅ Importazione completata!")
 print(f"   - Righe inserite: {inserite}")
 print(f"   - Righe saltate: {saltate}")
 
