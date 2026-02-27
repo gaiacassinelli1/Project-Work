@@ -30,6 +30,44 @@ cursor.execute("SELECT DATABASE();")
 print("Connected to database:", cursor.fetchone()[0])
 cursor.close()
 conn.close()
+
+# FUNZIONE RIUTILIZZABILE PER MYSQL
+# ========================================
+
+def get_mysql_connection():
+    """
+    Crea e ritorna una connessione MySQL
+    
+    Returns:
+        mysql.connector.connection: Connessione al database
+    
+    Example:
+        conn = get_mysql_connection()
+        cursore = conn.cursor()
+    """
+    conn = mysql.connector.connect(
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
+        auth_plugin='mysql_native_password'
+    )
+    return conn
+
+if __name__ == "__main__":
+    # Test MySQL
+    try:
+        conn = get_mysql_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT DATABASE()")
+        db_name = cursor.fetchone()[0]
+        print("✅ Connection successful!")
+        print(f"✅ Connected to database: {db_name}")
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"❌ MySQL connection failed: {e}")
+
 # connessione file json
 import firebase_admin
 from firebase_admin import credentials, firestore
