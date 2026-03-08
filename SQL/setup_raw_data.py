@@ -2,12 +2,9 @@
 # Script per creare la tabella raw_data e importare dati da Google Sheets
 
 import os
-import json
-import mysql.connector
 from dotenv import load_dotenv
-from googleapiclient.discovery import build
-from google.oauth2 import service_account
 from datetime import datetime
+from connessioni import get_mysql_connection, get_google_sheets_service
 
 # ========================================
 # FUNZIONI HELPER
@@ -39,21 +36,14 @@ env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(env_path)
 
 # Connessione MySQL
-conn = mysql.connector.connect(
-    host=os.getenv("DB_HOST"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
-    database=os.getenv("DB_NAME"),
-    auth_plugin='mysql_native_password'
-)
+conn = get_mysql_connection()
 cursore = conn.cursor()
-print("✅ Connesso al database MySQL!")
 
 # ========================================
 # 2. CREA TABELLA RAW_DATA
 # ========================================
 
-print("\n📋 Creazione tabella raw_data...")
+print("\nCreazione tabella raw_data...")
 
 # Elimina tabella esistente
 cursore.execute("DROP TABLE IF EXISTS raw_data")
@@ -100,47 +90,40 @@ CREATE TABLE raw_data (
     Item_27             INT,
     Item_28             INT,
     Item_29             INT,
-    Item_30             TEXT,
-    UNIQUE KEY unique_response (timestamp, email_indirizzo, email_app)
+    Item_30             TEXT
 )
 """
 
 cursore.execute(query_crea_tabella)
 conn.commit()
-print("✅ Tabella raw_data creata con UNIQUE constraint su (timestamp, email_indirizzo, email_app)!")
-
-cursore.close()
-conn.close()
+print("Tabella raw_data creata")
 
 # ========================================
 # 3. CARICA CREDENZIALI GOOGLE
 # ========================================
 
-print("\n🔑 Caricamento credenziali Google...")
+print("\nCredenziali caricate!")
 
-credenziali_json = os.getenv("GOOGLE_CREDENTIALS")
-credenziali_dict = json.loads(credenziali_json)
-credenziali_dict['private_key'] = credenziali_dict['private_key'].replace('\\n', '\n')
-
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-
-credenziali = service_account.Credentials.from_service_account_info(
-    credenziali_dict,
-    scopes=SCOPES
-)
-print("✅ Credenziali caricate!")
+try:
+    servizio = get_google_sheets_service()
+except Exception as e:
+    print(f"Errore nel caricamento credenziali: {e}")
+    exit()
 
 # ========================================
 # 4. LEGGI GOOGLE SHEET
 # ========================================
 
-print("\n📡 Connessione a Google Sheets...")
+print("\nConnessione a Google Sheets...")
 
-ID_FOGLIO  = '14XJF4TtNgnHv_uuJeUcWAjipOYs5-hPYbslC4xXyqwQ'
-INTERVALLO = 'Risposte del modulo 1!A:AM'
+ID_FOGLIO  = os.getenv("GOOGLE_SHEET_ID")
+INTERVALLO = os.getenv("GOOGLE_SHEET_RANGE")
 
-servizio = build('sheets', 'v4', credentials=credenziali)
-foglio   = servizio.spreadsheets()
+if not ID_FOGLIO or not INTERVALLO:
+    print("Errore: GOOGLE_SHEET_ID o GOOGLE_SHEET_RANGE non configurati nel .env!")
+    exit()
+
+foglio = servizio.spreadsheets()
 
 risultato = foglio.values().get(
     spreadsheetId=ID_FOGLIO,
@@ -150,26 +133,24 @@ risultato = foglio.values().get(
 righe = risultato.get('values', [])
 
 if not righe:
-    print("❌ Nessun dato trovato nel foglio!")
+    print("Errore: Nessun dato trovato nel foglio!")
     exit()
 
-print(f"✅ Trovate {len(righe) - 1} risposte")
-print(f"📋 Numero colonne: {len(righe[0])}")
+print(f"Trovate {len(righe) - 1} risposte")
+print(f"Numero colonne: {len(righe[0])}")
+
+# Chiudi la connessione iniziale prima di leggere dal foglio
+cursore.close()
+conn.close()
 
 # ========================================
 # 5. INSERISCI DATI IN RAW_DATA
 # ========================================
 
-print("\n📥 Inizio importazione dati in raw_data...\n")
+print("\nInizio importazione dati in raw_data...\n")
 
-# Riconnette al database
-conn = mysql.connector.connect(
-    host=os.getenv("DB_HOST"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
-    database=os.getenv("DB_NAME"),
-    auth_plugin='mysql_native_password'
-)
+# Ricrea la connessione per l'inserimento
+conn = get_mysql_connection()
 cursore = conn.cursor()
 
 query_insert = """
@@ -253,18 +234,18 @@ for i, riga in enumerate(righe[1:], start=2):
 
         if inserite % 10 == 0:
             conn.commit()
-            print(f"💾 Salvate {inserite} righe...")
+            print(f"Salvate {inserite} righe...")
 
     except Exception as e:
-        print(f"⚠️ Riga {i} saltata: {e}")
+        print(f"Riga {i} saltata: {e}")
         saltate += 1
 
 conn.commit()
-print(f"\n✅ Importazione completata!")
+print(f"\nImportazione completata!")
 print(f"   - Righe inserite: {inserite}")
 print(f"   - Righe saltate: {saltate}")
 
 cursore.close()
 conn.close()
 
-print("\n🎉 Script completato con successo!")
+print("\nFine")
