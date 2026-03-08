@@ -1,18 +1,16 @@
 # connessione file mysql
+from dotenv import load_dotenv
 import mysql.connector
 import os
 
+# Carica .env dalla root del progetto
+env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv(env_path)
+
 def get_mysql_connection():
-    """
-    Crea e ritorna una connessione MySQL
     
-    Returns:
-        mysql.connector.connection: Connessione al database
-    
-    Example:
-        conn = get_mysql_connection()
-        cursore = conn.cursor()
-    """
+    #Crea e ritorna una connessione MySQL
+
     conn = mysql.connector.connect(
         host=os.getenv("DB_HOST"),
         user=os.getenv("DB_USER"),
@@ -29,13 +27,13 @@ if __name__ == "__main__":
         cursor = conn.cursor()
         cursor.execute("SELECT DATABASE()")
         db_name = cursor.fetchone()[0]
-        print("✅ Connection successful!")
-        print(f"✅ Connected to database: {db_name}")
+        print("Connection successful!")
+        print(f"Connected to database: {db_name}")
         cursor.close()
         conn.close()
     except Exception as e:
-        print(f"❌ MySQL connection failed: {e}")
-
+        print(f"MySQL connection failed: {e}")
+"""
 # connessione file json
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -46,7 +44,6 @@ from dotenv import load_dotenv
 from google.oauth2 import service_account
 
 
-load_dotenv()
 
 # Firebase/Firestore setup
 credentials_json = os.getenv("GOOGLE_CREDENTIALS")
@@ -61,3 +58,4 @@ print("Firebase connected successfully!")
 
 # Now you can use both MySQL and Firestore
 # conn.close()  # Close when done
+"""

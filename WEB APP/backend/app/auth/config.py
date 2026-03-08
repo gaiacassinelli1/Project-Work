@@ -5,7 +5,9 @@ Centralizza tutte le configurazioni di autenticazione.
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+# Carica .env dalla root del progetto
+env_path = os.path.join(os.path.dirname(__file__), '../../../../.env')
+load_dotenv(env_path)
 
 # JWT Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "mare-calmo-secret-key-change-in-production")

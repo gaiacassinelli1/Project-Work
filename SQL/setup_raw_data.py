@@ -34,7 +34,9 @@ def converti_item(valore):
 # 1. CONFIGURAZIONE
 # ========================================
 
-load_dotenv()
+# Carica .env dalla root del progetto
+env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv(env_path)
 
 # Connessione MySQL
 conn = mysql.connector.connect(
