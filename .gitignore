@@ -4,13 +4,15 @@
 .env.*.local
 
 # Sensitive credentials
-SQL/credentials.json
+local/*.json
 
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.pyc
+*.pyo
 .Python
 env/
 venv/
