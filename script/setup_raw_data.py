@@ -1,14 +1,9 @@
-# setup_raw_data.py
 # Script per creare la tabella raw_data e importare dati da Google Sheets
 
 import os
 from dotenv import load_dotenv
 from datetime import datetime
 from connessioni import get_mysql_connection, get_google_sheets_service
-
-# ========================================
-# FUNZIONI HELPER
-# ========================================
 
 def converti_vuoto_in_null(valore):
     """Converte stringhe vuote o None in NULL"""
@@ -27,10 +22,6 @@ def converti_item(valore):
     except:
         return None
 
-# ========================================
-# 1. CONFIGURAZIONE
-# ========================================
-
 # Carica .env dalla root del progetto
 env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(env_path)
@@ -38,10 +29,6 @@ load_dotenv(env_path)
 # Connessione MySQL
 conn = get_mysql_connection()
 cursore = conn.cursor()
-
-# ========================================
-# 2. CREA TABELLA RAW_DATA
-# ========================================
 
 print("\nCreazione tabella raw_data...")
 
@@ -98,10 +85,6 @@ cursore.execute(query_crea_tabella)
 conn.commit()
 print("Tabella raw_data creata")
 
-# ========================================
-# 3. CARICA CREDENZIALI GOOGLE
-# ========================================
-
 print("\nCredenziali caricate!")
 
 try:
@@ -110,9 +93,6 @@ except Exception as e:
     print(f"Errore nel caricamento credenziali: {e}")
     exit()
 
-# ========================================
-# 4. LEGGI GOOGLE SHEET
-# ========================================
 
 print("\nConnessione a Google Sheets...")
 
@@ -142,10 +122,6 @@ print(f"Numero colonne: {len(righe[0])}")
 # Chiudi la connessione iniziale prima di leggere dal foglio
 cursore.close()
 conn.close()
-
-# ========================================
-# 5. INSERISCI DATI IN RAW_DATA
-# ========================================
 
 print("\nInizio importazione dati in raw_data...\n")
 

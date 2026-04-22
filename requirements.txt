@@ -20,5 +20,6 @@ numpy
 scikit-learn
 matplotlib
 seaborn
+nbconvert
 
 # pip install --use-deprecated=legacy-resolver -r requirements.txt
