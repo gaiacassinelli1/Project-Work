@@ -4,7 +4,7 @@
 import os
 from dotenv import load_dotenv
 from datetime import datetime
-from script.connessioni import get_mysql_connection, get_google_sheets_service
+from connessioni import get_mysql_connection, get_google_sheets_service
 
 # ========================================
 # FUNZIONI HELPER

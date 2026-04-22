@@ -26,20 +26,23 @@ def get_mysql_connection():
 def get_google_sheets_service():
     """Carica credenziali Google e ritorna il servizio Google Sheets"""
     
-    # Prova a leggere da file credentials.json prima di .env
-    credentials_file = os.path.join(os.path.dirname(__file__), 'analisi-ansia-dcecdb75c868.json')
+    # Prova a leggere da file credentials.json
+    # Il file è nella cartella "local" a livello di root del progetto
+    credentials_file = os.path.join(os.path.dirname(__file__), '..', 'local', 'analisi-ansia-dcecdb75c868.json')
     
     if os.path.exists(credentials_file):
         # Leggi da file
         with open(credentials_file, 'r') as f:
             credenziali_dict = json.load(f)
+            print(f"Credenziali caricate da: {credentials_file}")
     else:
         # Prova da .env
         credenziali_json = os.getenv("GOOGLE_CREDENTIALS")
         if not credenziali_json:
-            raise ValueError("GOOGLE_CREDENTIALS non configurato nel .env!")
+            raise ValueError("File credenziali non trovato e GOOGLE_CREDENTIALS non configurato nel .env!")
         try:
             credenziali_dict = json.loads(credenziali_json)
+            print("Credenziali caricate da .env")
         except json.JSONDecodeError:
             raise ValueError("GOOGLE_CREDENTIALS non è un JSON valido!")
     
