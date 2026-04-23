@@ -21,5 +21,6 @@ scikit-learn
 matplotlib
 seaborn
 nbconvert
+openpyxl
 
 # pip install --use-deprecated=legacy-resolver -r requirements.txt
