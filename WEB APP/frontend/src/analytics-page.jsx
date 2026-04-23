@@ -3,7 +3,7 @@ import { AuthContext } from "./auth-context";
 import { apiGet, apiPost } from "./api";
 
 /**
- * 📊 AnalyticsPage — Insights e trend dell'utente
+ * AnalyticsPage — Insights e trend dell'utente
  * 
  * Mostra:
  * - Trend dell'ansia nel tempo
@@ -77,7 +77,7 @@ export function AnalyticsPage({ theme, onBack }) {
         color: theme.textPrimary,
         fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif",
       }}>
-        ⏳ Caricamento analytics...
+        Caricamento analytics...
       </div>
     );
   }
@@ -98,7 +98,7 @@ export function AnalyticsPage({ theme, onBack }) {
             color: theme.textPrimary,
             margin: "0 0 8px",
           }}>
-            📊 I tuoi insight
+            I tuoi insight
           </h1>
           <p style={{
             fontSize: 14,
@@ -120,7 +120,7 @@ export function AnalyticsPage({ theme, onBack }) {
             color: theme.textPrimary,
             fontSize: 13,
           }}>
-            ⚠️ {error}
+            {error}
           </div>
         )}
 
@@ -209,7 +209,7 @@ export function AnalyticsPage({ theme, onBack }) {
                 color: theme.textPrimary,
                 margin: 0,
               }}>
-                {analytics.anxiety_trend < 0 ? "📉 In miglioramento" : analytics.anxiety_trend > 0 ? "📈 In aumento" : "➡️ Stabile"}
+                {analytics.anxiety_trend < 0 ? "In miglioramento" : analytics.anxiety_trend > 0 ? "📈 In aumento" : "➡️ Stabile"}
               </p>
               <div style={{
                 fontSize: 13,
@@ -306,7 +306,7 @@ export function AnalyticsPage({ theme, onBack }) {
                 onMouseEnter={(e) => e.target.style.borderColor = theme.accentSoft}
                 onMouseLeave={(e) => e.target.style.borderColor = theme.cardBorder}
               >
-                📥 Scarica JSON
+                Scarica JSON
               </button>
 
               <button
@@ -330,7 +330,7 @@ export function AnalyticsPage({ theme, onBack }) {
                 onMouseEnter={(e) => !exporting && (e.target.style.background = theme.accentGlow)}
                 onMouseLeave={(e) => e.target.style.background = theme.accentSoft}
               >
-                {exporting ? "⏳ Sincronizzazione..." : "☁️ Sincronizza MongoDB"}
+                {exporting ? "Sincronizzazione..." : "Sincronizza MongoDB"}
               </button>
             </div>
           </div>
@@ -347,7 +347,7 @@ export function AnalyticsPage({ theme, onBack }) {
               fontSize: 48,
               margin: "0 0 12px",
             }}>
-              📭
+              
             </p>
             <p style={{
               fontSize: 14,

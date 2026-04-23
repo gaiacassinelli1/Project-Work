@@ -1,5 +1,5 @@
 """
-🔐 JWT Token Module
+JWT Token Module
 Crea e verifica JWT tokens per l'autenticazione.
 """
 from datetime import datetime, timedelta

@@ -1,5 +1,5 @@
 """
-API Routes — event-driven, minimal, backend-centric.
+API Routes
 
 L'API è progettata secondo un modello event-driven minimale,
 in cui il backend centralizza la logica di progressione e
@@ -34,7 +34,7 @@ router = APIRouter()
 
 
 # ──────────────────────────────────────────────
-# 🔐 AUTHENTICATION — Autenticazione utenti
+# AUTHENTICATION — Autenticazione utenti
 # ──────────────────────────────────────────────
 
 
@@ -78,7 +78,7 @@ def create_event(
     Registra un evento immutabile.
     Il frontend non sa cosa succede dopo.
     
-    🔐 Richiede autenticazione.
+    Richiede autenticazione.
     """
     event = Event(
         user_id=current_user.id,
@@ -102,12 +102,12 @@ def get_sea_state(
     """
     Restituisce lo stato del mare già calcolato.
     
-    🔐 Richiede autenticazione, e user_id deve corrispondere all'utente.
+    Richiede autenticazione, e user_id deve corrispondere all'utente.
     """
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="🔐 Non hai accesso ai dati di questo utente.",
+            detail="Non hai accesso ai dati di questo utente.",
         )
     
     sea_state = db.get(SeaState, user_id)
@@ -133,12 +133,12 @@ def get_user_fish(
     """
     Restituisce stato dei pesci. visual_stage è già discretizzato.
     
-    🔐 Richiede autenticazione, e user_id deve corrispondere all'utente.
+    Richiede autenticazione, e user_id deve corrispondere all'utente.
     """
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="🔐 Non hai accesso ai dati di questo utente.",
+            detail="Non hai accesso ai dati di questo utente.",
         )
     
     fish_list = db.execute(
@@ -170,12 +170,12 @@ def compute_state(
     Trigger ricalcolo di crescita pesci + stato mare.
     In produzione diventa un cron job.
     
-    🔐 Richiede autenticazione, e user_id deve corrispondere all'utente.
+    Richiede autenticazione, e user_id deve corrispondere all'utente.
     """
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="🔐 Non hai accesso ai dati di questo utente.",
+            detail="Non hai accesso ai dati di questo utente.",
         )
     
     compute_fish_growth(db, user_id)
@@ -185,7 +185,7 @@ def compute_state(
 
 
 # ──────────────────────────────────────────────
-# 📊 EXPORT & ANALYTICS
+# EXPORT & ANALYTICS
 # ──────────────────────────────────────────────
 @router.get("/user/{user_id}/export-data")
 def export_user_data_endpoint(
@@ -197,12 +197,12 @@ def export_user_data_endpoint(
     Esporta i dati dell'utente in formato JSON.
     Include events, game state, e statistiche.
     
-    🔐 Richiede autenticazione, e user_id deve corrispondere all'utente.
+    Richiede autenticazione, e user_id deve corrispondere all'utente.
     """
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="🔐 Non hai accesso ai dati di questo utente.",
+            detail="Non hai accesso ai dati di questo utente.",
         )
     
     return export_user_data(db, user_id)
@@ -221,12 +221,12 @@ def sync_user_to_mongodb_endpoint(
     - export_data: JSON esportato
     - mongodb_result: Risultato della sincronizzazione
     
-    🔐 Richiede autenticazione, e user_id deve corrispondere all'utente.
+    Richiede autenticazione, e user_id deve corrispondere all'utente.
     """
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="🔐 Non hai accesso ai dati di questo utente.",
+            detail="Non hai accesso ai dati di questo utente.",
         )
     
     return sync_to_mongodb(db, user_id)
@@ -245,12 +245,12 @@ def get_user_analytics_endpoint(
     - Correlazioni per dimensione
     - Statistiche aggregate
     
-    🔐 Richiede autenticazione, e user_id deve corrispondere all'utente.
+    Richiede autenticazione, e user_id deve corrispondere all'utente.
     """
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="🔐 Non hai accesso ai dati di questo utente.",
+            detail="Non hai accesso ai dati di questo utente.",
         )
     
     analytics = get_user_analytics(user_id)

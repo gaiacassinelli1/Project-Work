@@ -1,24 +1,24 @@
 @echo off
-REM 🚀 Quick Start - Mare Calmo v2.0 (Windows)
+REM Quick Start - Mare Calmo v2.0 (Windows)
 
 setlocal enabledelayedexpansion
 
-echo 🌊 Mare Calmo - Quick Start
+echo Mare Calmo - Quick Start
 echo ============================
 echo.
 
 REM Check Python
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Python non trovato. Installare Python.
+    echo Python non trovato. Installare Python.
     pause
     exit /b 1
 )
-echo ✅ Python trovato
+echo Python trovato
 
 REM Setup Backend
 echo.
-echo 📦 Setup Backend...
+echo Setup Backend...
 
 cd backend
 
@@ -35,10 +35,10 @@ REM Install dependencies
 echo    Installazione dipendenze...
 pip install -q -r requirements.txt 2>nul
 
-echo ✅ Backend configurato
+echo Backend configurato
 
 echo.
-echo 🚀 Avvio server backend...
+echo Avvio server backend...
 echo    - http://localhost:8000
 echo    - Docs: http://localhost:8000/docs
 echo.
@@ -51,14 +51,14 @@ timeout /t 2 /nobreak
 REM Setup Frontend
 cd ..
 echo.
-echo 📦 Setup Frontend...
+echo Setup Frontend...
 
 cd frontend
 
 REM Check npm
 where npm >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ⚠️  npm non trovato. frontend richiede Node.js + npm
+    echo npm non trovato. frontend richiede Node.js + npm
     echo    Scarica da: https://nodejs.org/
     pause
     goto end
@@ -70,10 +70,10 @@ if not exist "node_modules" (
     call npm install -q
 )
 
-echo ✅ Frontend configurato
+echo Frontend configurato
 
 echo.
-echo 🚀 Avvio dev server frontend...
+echo Avvio dev server frontend...
 echo    - http://localhost:5173
 echo.
 
@@ -81,7 +81,7 @@ start cmd /k "cd /d !cd!\frontend & npm run dev"
 
 :end
 echo.
-echo 🌊 Mare Calmo è stato avviato!
+echo Mare Calmo è stato avviato!
 echo.
 echo Backend: http://localhost:8000
 echo Frontend: http://localhost:5173

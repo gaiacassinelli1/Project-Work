@@ -20,7 +20,7 @@ function App() {
         color: '#F5F7FF',
         fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif",
       }}>
-        ⏳ Caricamento...
+        Caricamento...
       </div>
     )
   }

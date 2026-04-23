@@ -1,5 +1,5 @@
 /**
- * 🌊 Mare Calmo App — Main Entry Point
+ * Mare Calmo App — Main Entry Point
  * 
  * Questo componente:
  * - Carica il tema (notte/alba)
@@ -139,8 +139,8 @@ function AppContent() {
               console.clear();
               fetch('http://localhost:8000')
                 .then(r => r.json())
-                .then(d => console.log('✅ Backend:', d))
-                .catch(e => console.error('❌ Backend:', e.message));
+                .then(d => console.log('Backend:', d))
+                .catch(e => console.error('Backend:', e.message));
             }}
             style={{
               background: theme.accentColor,

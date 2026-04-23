@@ -1,5 +1,5 @@
 """
-🗄️ MongoDB Integration — Analytics & Data Export
+MongoDB Integration — Analytics & Data Export
 
 Optional MongoDB connection per analytics e insights.
 Se MongoDB non è disponibile, il sistema funziona comunque (fallback).
@@ -17,22 +17,22 @@ def init_mongodb():
     """Inizializza MongoDB connection (opzionale)."""
     global mongo_client, mongo_db
     if not MONGODB_URL:
-        print("⚠️  MongoDB non configurato. Analytics skipped.")
+        print("MongoDB non configurato. Analytics skipped.")
         return False
     
     try:
         mongo_client = MongoClient(MONGODB_URL, serverSelectionTimeoutMS=5000)
         mongo_client.admin.command('ping')
         mongo_db = mongo_client['mare_calmo']
-        print("✅ MongoDB connesso")
+        print("MongoDB connesso")
         return True
     except errors.ServerSelectionTimeoutError:
-        print("⚠️  MongoDB non disponibile. Analytics offline.")
+        print("MongoDB non disponibile. Analytics offline.")
         mongo_client = None
         mongo_db = None
         return False
     except Exception as e:
-        print(f"⚠️  MongoDB error: {e}")
+        print(f"MongoDB error: {e}")
         mongo_client = None
         mongo_db = None
         return False

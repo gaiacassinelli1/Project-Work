@@ -24,9 +24,9 @@ from app.routes.api import router
 async def lifespan(app: FastAPI):
     """Initialize DB on startup."""
     init_db()
-    print("✅ Database initialized (SQLite)")
+    print("Database initialized (SQLite)")
     init_mongodb()
-    print("🌊 Mare Calmo backend is ready")
+    print("Mare Calmo backend is ready")
     yield
 
 
@@ -76,6 +76,6 @@ def root():
         "app": "Mare Calmo",
         "version": "0.1.0",
         "docs": "/docs",
-        "status": "🌊 Il mare è calmo",
+        "status": "Il mare è calmo",
     }
 

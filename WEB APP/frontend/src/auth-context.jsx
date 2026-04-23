@@ -2,7 +2,7 @@ import { createContext, useState, useCallback, useEffect } from "react";
 import { API_BASE_URL, fetchWithRetry, getUserFriendlyError } from "./api-config";
 
 /**
- * 🔐 AuthContext — Gestisce lo stato di autenticazione globale
+ * AuthContext — Gestisce lo stato di autenticazione globale
  * 
  * Fornisce:
  * - token: JWT token salvato in localStorage
