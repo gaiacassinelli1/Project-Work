@@ -1,0 +1,182 @@
+{
+  "metadata": {
+    "timestamp": "20260423_191956",
+    "source": "clustering_analysis",
+    "total_records": 550,
+    "records_analyzed": 538,
+    "version": "1.0",
+    "language": "it"
+  },
+  "clustering_parameters": {
+    "features_used": [
+      "ansia_totale",
+      "coping",
+      "evitamento",
+      "resilienza",
+      "gap"
+    ],
+    "optimal_k": 2,
+    "silhouette_score_mean": 0.4110046119722396,
+    "methods_compared": [
+      "K-Means",
+      "DBSCAN",
+      "Gaussian Mixture Model"
+    ]
+  },
+  "sections": {
+    "summary": {
+      "descrizione": "Statistiche generali dell'analisi di clustering sulla popolazione studiata",
+      "dati": [
+        {
+          "Metrica": "Totale record",
+          "Valore": 550
+        },
+        {
+          "Metrica": "Record con feature complete",
+          "Valore": 538
+        },
+        {
+          "Metrica": "Numero cluster ottimale",
+          "Valore": 2
+        },
+        {
+          "Metrica": "Silhouette score medio",
+          "Valore": "0.4110"
+        },
+        {
+          "Metrica": "DBSCAN noise points",
+          "Valore": 314
+        },
+        {
+          "Metrica": "Random Forest accuracy",
+          "Valore": "1.0000"
+        }
+      ]
+    },
+    "cluster_statistics": {
+      "descrizione": "Medie e deviazioni standard delle feature per ogni cluster identificato",
+      "dati": [
+        {
+          "cluster_id": 0,
+          "size": 342,
+          "percentage": 63.56877323420075,
+          "silhouette_mean": 0.4283323722048317,
+          "silhouette_std": 0.16802934407210512,
+          "silhouette_min": 0.028975142447913885,
+          "silhouette_max": 0.616883974697807,
+          "ansia_totale_mean": -0.5290077495899593,
+          "ansia_totale_std": 0.7147288252104148,
+          "coping_mean": 0.5239213889662512,
+          "coping_std": 0.7513220089294586,
+          "evitamento_mean": -0.490220005747504,
+          "evitamento_std": 0.6905535323547972,
+          "resilienza_mean": 0.6089631693716098,
+          "resilienza_std": 0.5846452870279456,
+          "gap_mean": -0.5172841859076922,
+          "gap_std": 0.6614575810081513
+        },
+        {
+          "cluster_id": 1,
+          "size": 196,
+          "percentage": 36.43122676579926,
+          "silhouette_mean": 0.38076943850516565,
+          "silhouette_std": 0.1520841104388296,
+          "silhouette_min": 0.046217354261158916,
+          "silhouette_max": 0.5659733667133767,
+          "ansia_totale_mean": 0.9230645426518664,
+          "ansia_totale_std": 0.7163676163770606,
+          "coping_mean": -0.9141893623798868,
+          "coping_std": 0.6672511526719739,
+          "evitamento_mean": 0.8553838875798282,
+          "evitamento_std": 0.8728176977175037,
+          "resilienza_mean": -1.0625785914545436,
+          "resilienza_std": 0.6101882522399392,
+          "gap_mean": 0.9026081203083199,
+          "gap_std": 0.8365722800408562
+        }
+      ]
+    },
+    "silhouette_analysis": {
+      "descrizione": "Analisi della qualità dei cluster attraverso Silhouette Score. Valori più alti indicano cluster ben separati",
+      "dati": [
+        {
+          "Cluster": 0,
+          "Media": 0.4283323722048317,
+          "Std Dev": 0.16802934407210512,
+          "Min": 0.028975142447913885,
+          "Max": 0.616883974697807
+        },
+        {
+          "Cluster": 1,
+          "Media": 0.38076943850516565,
+          "Std Dev": 0.1520841104388296,
+          "Min": 0.046217354261158916,
+          "Max": 0.5659733667133767
+        }
+      ]
+    },
+    "feature_importance": {
+      "descrizione": "Importanza relativa di ogni feature nella discriminazione tra cluster (da Random Forest)",
+      "dati": [
+        {
+          "feature": "resilienza",
+          "importance": 0.5046900052990446
+        },
+        {
+          "feature": "ansia_totale",
+          "importance": 0.16766419858717496
+        },
+        {
+          "feature": "gap",
+          "importance": 0.16194303786391828
+        },
+        {
+          "feature": "coping",
+          "importance": 0.11164167731677226
+        },
+        {
+          "feature": "evitamento",
+          "importance": 0.05406108093308996
+        }
+      ]
+    },
+    "cluster_assignments": {
+      "descrizione": "Assegnazione di ogni record al cluster corrispondente",
+      "total_records": 538,
+      "cluster_distribution": {
+        "cluster_0": 342,
+        "cluster_1": 196
+      }
+    },
+    "psychological_profiles": {
+      "descrizione": "Interpretazione psicologica dei profili identificati",
+      "dati": [
+        {
+          "cluster_id": 0,
+          "profile": "Ansiosi Disfunzionali",
+          "characteristics": "Elevata ansia, basso coping, gap percettivo significativo"
+        },
+        {
+          "cluster_id": 1,
+          "profile": "Ansiosi Funzionali",
+          "characteristics": "Elevata ansia ma coping efficace, gap ridotto"
+        },
+        {
+          "cluster_id": 2,
+          "profile": "Resilienti",
+          "characteristics": "Bassa ansia, coping elevato, resilienza marcata"
+        },
+        {
+          "cluster_id": 3,
+          "profile": "Evitanti",
+          "characteristics": "Elevato evitamento, coping ridotto"
+        },
+        {
+          "cluster_id": 4,
+          "profile": "Intermedio",
+          "characteristics": "Profilo misto, caratteristiche non estreme"
+        }
+      ]
+    }
+  }
+}
