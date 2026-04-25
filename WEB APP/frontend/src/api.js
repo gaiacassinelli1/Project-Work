@@ -1,5 +1,5 @@
 /**
- * 🌊 API Utility — Gestisce richieste autenticate al backend
+ * API Utility — Gestisce richieste autenticate al backend
  * 
  * Aggiunge automaticamente il JWT token da localStorage
  */
