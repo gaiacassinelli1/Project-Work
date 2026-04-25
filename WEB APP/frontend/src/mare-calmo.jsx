@@ -2,10 +2,6 @@ import { useState, useEffect, useCallback, useMemo, useRef, useContext } from "r
 import { AuthContext } from "./auth-context";
 import { AnalyticsPage } from "./analytics-page";
 
-// ============================================================
-// MARE CALMO — App di supporto all'ansia da prestazione
-// ============================================================
-
 const themes = {
   notte: {
     name: "notte", bgPrimary: "#1A2E3E", bgSecondary: "#2A3E52",
@@ -65,9 +61,7 @@ const reflectionPrompts = [
   "Come ti sentiresti se ti concedessi di non essere perfetto oggi?",
 ];
 
-// ============================================================
 // IMPROVED FISH SVG — 3 variants with gradients
-// ============================================================
 function FishBody({ color, accent, variant, id }) {
   if (variant === 1) {
     return (
@@ -198,9 +192,7 @@ function Seaweed({ x, color, h }) {
   );
 }
 
-// ============================================================
 // ISLAND SVG
-// ============================================================
 function IslandSVG({ theme, lanternGlow, dayCount }) {
   const hasPlant = dayCount >= 3;
   const hasBench = dayCount >= 7;
@@ -369,10 +361,7 @@ function IslandSVG({ theme, lanternGlow, dayCount }) {
   );
 }
 
-
-// ============================================================
 // PAGES
-// ============================================================
 
 function OnboardingPage({ theme, onComplete }) {
   const [step, setStep] = useState(0);
@@ -672,7 +661,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
           color: theme.textSecondary, fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 13, fontWeight: 500,
           cursor: "pointer", backdropFilter: "blur(12px)", transition: "all 0.3s ease",
         }}>
-          🧰 Strumenti
+          Strumenti
         </button>
       </div>
 
@@ -867,10 +856,7 @@ function ProgressPage({ theme, checkIns, fishData, seaState, onBack }) {
   );
 }
 
-
-// ============================================================
 // MAIN APP
-// ============================================================
 export default function App() {
   const auth = useContext(AuthContext);
   const [themeName, setThemeName] = useState("notte");
@@ -940,7 +926,7 @@ export default function App() {
               fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif",
               maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
             }}>
-              📧 {auth.user.email}
+              {auth.user.email}
             </div>
           )}
 
@@ -951,7 +937,7 @@ export default function App() {
             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16,
             transition: "all 0.4s ease",
           }} title="Logout">
-            🔓
+            🔒
           </button>
 
           {/* Button musica */}

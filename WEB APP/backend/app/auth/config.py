@@ -1,5 +1,5 @@
 """
-🔐 Authentication Configuration
+Authentication Configuration
 Centralizza tutte le configurazioni di autenticazione.
 """
 import os

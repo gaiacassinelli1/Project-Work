@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "./auth-context";
 
 /**
- * 🔓 AuthPage — Pagina di login e registrazione
+ * AuthPage — Pagina di login e registrazione
  * Design coerente con il resto dell'app (tema notte/alba, animazioni, font)
  */
 
@@ -105,7 +105,7 @@ export function AuthPage({ theme: initialTheme, onAuthSuccess }) {
           color: theme.textPrimary,
           margin: "0 0 12px",
         }}>
-          🌊 Mare Calmo
+          Isole di Calma
         </h1>
         <p style={{
           fontSize: 16,

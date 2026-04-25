@@ -63,7 +63,7 @@ function AppContent() {
         fontFamily: "'Century Gothic', sans-serif",
       }}>
         <div style={{ textAlign: 'center', color: theme.textPrimary }}>
-          <h1>🌊 Mare Calmo</h1>
+          <h1>Mare Calmo</h1>
           <p>Caricamento...</p>
         </div>
       </div>

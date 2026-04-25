@@ -1,5 +1,5 @@
 """
-🔑 Authentication Dependencies
+Authentication Dependencies
 Fornisce le dipendenze per proteggere le route.
 """
 from fastapi import Depends, HTTPException, status, Header
