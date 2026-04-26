@@ -22,5 +22,6 @@ matplotlib
 seaborn
 nbconvert
 openpyxl
+jsonwebtoken
 
 # pip install --use-deprecated=legacy-resolver -r requirements.txt
