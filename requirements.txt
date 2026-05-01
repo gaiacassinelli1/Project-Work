@@ -25,5 +25,9 @@ openpyxl
 jsonwebtoken
 email-validator
 slowapi
+tensorflow
+keras
+scikit-learn
+wordcloud
 
 # pip install --use-deprecated=legacy-resolver -r requirements.txt

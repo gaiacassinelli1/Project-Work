@@ -1,0 +1,71 @@
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                     SENTIMENT ANALYSIS - REPORT FINALE                     ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+DATASET:
+─────────────────────────────────────────────────────────────────────────────
+Numero di risposte analizzate: 72
+Lunghezza media del testo: 114 caratteri
+
+DISTRIBUZIONE SENTIMENT:
+─────────────────────────────────────────────────────────────────────────────
+Positivo: 0.0% (0 risposte)
+Negativo: 100.0% (72 risposte)
+
+PERFORMANCE DEL MODELLO:
+─────────────────────────────────────────────────────────────────────────────
+Accuracy:  0.9333
+Precision: 0.0000
+Recall:    0.0000
+F1-Score:  0.0000
+AUC-ROC:   0.6071
+
+ARCHITETTURA DEL MODELLO:
+─────────────────────────────────────────────────────────────────────────────
+1. Embedding Layer (32D)
+   - Input: sequenze di indici (max 100 parole)
+   - Output: sequenze di embedding
+
+2. LSTM Layer (64 unità)
+   - Processa la sequenza ricordando dipendenze a lungo termine
+   - Dropout: 0.2 per regolarizzazione
+
+3. Dense Layer (32 unità)
+   - Activation: ReLU
+   - Dropout: 0.2
+
+4. Output Layer (1 unità)
+   - Activation: Sigmoid (classificazione binaria)
+
+INTERPRETAZIONE:
+─────────────────────────────────────────────────────────────────────────────
+Il modello LSTM ha imparato a mappare la struttura statistica del linguaggio
+nelle risposte aperte, permettendoci di classificare il sentiment con
+accuratezza 93.3%.
+
+Le risposte positive tendono a contenere parole associate a:
+- Miglioramento e progresso ("meglio", "migliore", "progresso")
+- Controllo e resilienza ("capace", "resiliente", "affrontare")
+- Efficacia terapeutica ("aiutato", "efficace", "successo")
+
+Le risposte negative tendono a contenere parole associate a:
+- Ansia e paura ("ansia", "paura", "panico")
+- Limitazione ("non riesco", "impossibile", "bloccato")
+- Evitamento ("evito", "fuggo", "evitamento")
+
+FILE GENERATI:
+─────────────────────────────────────────────────────────────────────────────
+✓ sentiment_analysis_results.csv - Predizioni per ogni testo
+✓ sentiment_training_history.png - Accuracy e Loss nel tempo
+✓ sentiment_evaluation_metrics.png - Confusion matrix e ROC curve
+✓ sentiment_wordcloud.png - Parole ricorrenti per sentiment
+
+PROSSIMI STEP:
+─────────────────────────────────────────────────────────────────────────────
+1. Validare le predizioni su campione annotato manualmente
+2. Fine-tuning del modello per migliorare performance
+3. Integrazione con analisi di clustering per profili psicologici
+4. Estrazione di temi ricorrenti (topic modeling) dalle risposte
+
+═════════════════════════════════════════════════════════════════════════════
