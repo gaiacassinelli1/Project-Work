@@ -7,7 +7,7 @@
  * - Gestione automatica del token Bearer
  */
 
-import { fetchWithRetry, getErrorMessage, API_CONFIG } from '../api-config';
+import { fetchWithRetry, getErrorMessage, API_CONFIG } from './api-config';
 
 /**
  * Effettua una richiesta API generica

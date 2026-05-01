@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/auth-context";
-import { apiGet, apiPost } from "../api/api";
+import { AuthContext } from "./context/auth-context";
+import { apiGet, apiPost } from "./api/api";
 
 /**
  * AnalyticsPage — Insights e trend dell'utente

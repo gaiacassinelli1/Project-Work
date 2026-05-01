@@ -11,7 +11,8 @@
  */
 
 import { createContext, useState, useCallback, useEffect } from 'react';
-import { authAPI, logAPIConfig } from '../api/api';
+import { authAPI } from "../api/api";
+import { logAPIConfig } from "../api/api-config";
 
 export const AuthContext = createContext(null);
 
