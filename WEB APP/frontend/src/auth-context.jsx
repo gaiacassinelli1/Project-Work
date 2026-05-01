@@ -1,103 +1,224 @@
-import { createContext, useState, useCallback, useEffect } from "react";
-import { API_BASE_URL, fetchWithRetry, getUserFriendlyError } from "./api-config";
-
 /**
- * AuthContext — Gestisce lo stato di autenticazione globale
+ * 🔐 AuthContext — Gestione globale dello stato di autenticazione
  * 
  * Fornisce:
- * - token: JWT token salvato in localStorage
- * - user: dati utente (email, user_id)
- * - login/register/logout
+ * - token: JWT token memorizzato in localStorage
+ * - user: dati utente (email, user_id, locale)
+ * - loading: stato di caricamento
+ * - register/login/logout: funzioni di autenticazione
  * 
- * Miglioramenti:
- * - Retry logic per errori di rete
- * - Messagi di errore user-friendly
- * - Timeout configurabile
+ * Persiste il token in localStorage per session recovery
  */
+
+import { createContext, useState, useCallback, useEffect } from 'react';
+import { authAPI, logAPIConfig } from './api';
+
 export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Carica il token dal localStorage all'avvio
+  // Carica il token dal localStorage al mount
   useEffect(() => {
-    const savedToken = localStorage.getItem("auth_token");
-    const savedUser = localStorage.getItem("auth_user");
+    console.log('[Auth] Initializing auth context...');
+    
+    const savedToken = localStorage.getItem('auth_token');
+    const savedUser = localStorage.getItem('auth_user');
+
     if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setToken(savedToken);
+        setUser(parsedUser);
+        console.log('[Auth] Sessione ripristinata per:', parsedUser.email);
+      } catch (e) {
+        console.error('[Auth] Errore nel parsing dell\'utente salvato:', e);
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+      }
     }
+
     setLoading(false);
+    
+    // Log API config
+    logAPIConfig();
   }, []);
 
-  const register = useCallback(async (email, password, locale = "it") => {
-    try {
-      console.log(`[Auth] Registrazione: ${email} (API: ${API_BASE_URL})`);
-      
-      const response = await fetchWithRetry(
-        `${API_BASE_URL}/auth/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, locale }),
+  /**
+   * Registra un nuovo utente
+   */
+  const register = useCallback(
+    async (email, password, locale = 'it') => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        console.log('[Auth] Inizio registrazione:', email);
+        
+        const result = await authAPI.register(email, password, locale);
+
+        if (result.success) {
+          const { access_token, email: userEmail, user_id } = result.data;
+          
+          // Salva in stato e localStorage
+          setToken(access_token);
+          setUser({ email: userEmail, user_id });
+          
+          localStorage.setItem('auth_token', access_token);
+          localStorage.setItem(
+            'auth_user',
+            JSON.stringify({ email: userEmail, user_id })
+          );
+          
+          console.log('[Auth] Registrazione completata:', email);
+          return { success: true };
+        } else {
+          const errorMsg = result.error || 'Errore sconosciuto durante la registrazione';
+          setError(errorMsg);
+          console.error('[Auth] Errore registrazione:', errorMsg);
+          return { success: false, error: errorMsg };
         }
-      );
+      } catch (err) {
+        const errorMsg = err.message || 'Errore di connessione';
+        setError(errorMsg);
+        console.error('[Auth] Errore registrazione:', err);
+        return { success: false, error: errorMsg };
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
-      const data = await response.json();
-      setToken(data.access_token);
-      setUser({ email: data.email, user_id: data.user_id });
-      localStorage.setItem("auth_token", data.access_token);
-      localStorage.setItem("auth_user", JSON.stringify({ email: data.email, user_id: data.user_id }));
-      
-      console.log(`[Auth] Registrazione completata: ${email}`);
-      return { success: true };
-    } catch (err) {
-      const errorMsg = getUserFriendlyError(err);
-      console.error(`[Auth] Errore registrazione:`, err);
-      return { success: false, error: errorMsg };
-    }
-  }, []);
+  /**
+   * Login utente
+   */
+  const login = useCallback(
+    async (email, password) => {
+      setLoading(true);
+      setError(null);
 
-  const login = useCallback(async (email, password) => {
-    try {
-      console.log(`[Auth] Login: ${email} (API: ${API_BASE_URL})`);
-      
-      const response = await fetchWithRetry(
-        `${API_BASE_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
+      try {
+        console.log('[Auth] Inizio login:', email);
+        
+        const result = await authAPI.login(email, password);
+
+        if (result.success) {
+          const { access_token, email: userEmail, user_id } = result.data;
+          
+          // Salva in stato e localStorage
+          setToken(access_token);
+          setUser({ email: userEmail, user_id });
+          
+          localStorage.setItem('auth_token', access_token);
+          localStorage.setItem(
+            'auth_user',
+            JSON.stringify({ email: userEmail, user_id })
+          );
+          
+          console.log('[Auth] Login completato:', email);
+          return { success: true };
+        } else {
+          const errorMsg = result.error || 'Errore sconosciuto durante il login';
+          setError(errorMsg);
+          console.error('[Auth] Errore login:', errorMsg);
+          return { success: false, error: errorMsg };
         }
-      );
+      } catch (err) {
+        const errorMsg = err.message || 'Errore di connessione';
+        setError(errorMsg);
+        console.error('[Auth] Errore login:', err);
+        return { success: false, error: errorMsg };
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
-      const data = await response.json();
-      setToken(data.access_token);
-      setUser({ email: data.email, user_id: data.user_id });
-      localStorage.setItem("auth_token", data.access_token);
-      localStorage.setItem("auth_user", JSON.stringify({ email: data.email, user_id: data.user_id }));
-      
-      console.log(`[Auth] Login completato: ${email}`);
-      return { success: true };
+  /**
+   * Logout
+   */
+  const logout = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      // Chiama il logout nel backend (opzionale, per logging)
+      if (token) {
+        await authAPI.logout(token);
+      }
     } catch (err) {
-      const errorMsg = getUserFriendlyError(err);
-      console.error(`[Auth] Errore login:`, err);
-      return { success: false, error: errorMsg };
+      console.warn('[Auth] Errore durante logout nel backend:', err);
+      // Continua comunque con il logout locale
+    } finally {
+      // Pulisci lo stato locale
+      setToken(null);
+      setUser(null);
+      setError(null);
+      
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
+      
+      console.log('[Auth] Logout completato');
+      setLoading(false);
     }
-  }, []);
+  }, [token]);
 
-  const logout = useCallback(() => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem("auth_token");
-    localStorage.removeItem("auth_user");
-    console.log(`[Auth] Logout completato`);
-  }, []);
+  /**
+   * Valida il token (utile per verificare se ancora valido)
+   */
+  const validateToken = useCallback(
+    async () => {
+      if (!token) {
+        return false;
+      }
+
+      try {
+        const result = await authAPI.getMe(token);
+        
+        if (result.success) {
+          console.log('[Auth] Token valido');
+          return true;
+        } else {
+          console.warn('[Auth] Token non valido, logout');
+          logout();
+          return false;
+        }
+      } catch (err) {
+        console.error('[Auth] Errore nella validazione del token:', err);
+        return false;
+      }
+    },
+    [token, logout]
+  );
+
+  // Log dei cambiamenti di stato (debug)
+  useEffect(() => {
+    console.log('[Auth] Stato cambiato:', {
+      isAuthenticated: !!token,
+      hasUser: !!user,
+      loading,
+      email: user?.email,
+    });
+  }, [token, user, loading]);
 
   return (
-    <AuthContext.Provider value={{ token, user, loading, register, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        loading,
+        error,
+        register,
+        login,
+        logout,
+        validateToken,
+        isAuthenticated: !!token,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
