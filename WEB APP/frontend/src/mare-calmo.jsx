@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef, useContext } from "react";
-import { AuthContext } from "./context/auth-context";
+import { AuthContext } from "./auth-context";
 import { AnalyticsPage } from "./analytics-page";
 
 const themes = {
@@ -372,10 +372,10 @@ function OnboardingPage({ theme, onComplete }) {
   ];
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      background: `linear-gradient(180deg, ${theme.bgGradientTop} 0%, ${theme.bgGradientBottom}99 100%)`, padding: 32, transition: "all 0.8s ease", backgroundAttachment: "fixed" }}>
+      background: `linear-gradient(180deg, ${theme.bgGradientTop} 0%, ${theme.bgGradientBottom} 100%)`, padding: 32, transition: "all 0.8s ease", backgroundAttachment: "fixed" }}>
       <div key={step} style={{ animation: "fadeSlideIn 0.8s ease", textAlign: "center", maxWidth: 340 }}>
         <div style={{ fontSize: 48, marginBottom: 32, opacity: 0.6 }}>
-          {step === 0 ? "🌊" : step === 1 ? "🏝" : "🐟"}
+          {step === 0 ? "〰" : step === 1 ? "⬡" : "◇"}
         </div>
         <h2 style={{ fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 22, fontWeight: 600, color: theme.textPrimary, lineHeight: 1.6, marginBottom: 12 }}>
           {steps[step].text}
@@ -454,7 +454,6 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
       <audio 
         ref={audioRef} 
         loop 
-        volume="0.3"
       />
 
       {/* Title + logo top-left */}
@@ -578,10 +577,9 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
         display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 18,
         transition: "all 0.4s ease",
       }} title={isPlayingMusic ? "Spegni musica" : "Accendi musica"}>
-        {isPlayingMusic ? "🎵" : "🔇"}
+        {isPlayingMusic ? "♫" : "♪"}
       </button>
       
-      <audio ref={audioRef} loop volume="0.3" />
     </div>
   );
 }
@@ -646,7 +644,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
   return (
     <div style={{
       minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center",
-      background: `linear-gradient(180deg, ${theme.bgGradientTop} 0%, ${theme.seaMid}40 40%, ${theme.seaDeep}50 100%)`,
+      background: `linear-gradient(180deg, ${theme.bgGradientTop} 0%, ${theme.seaMid} 40%, ${theme.seaDeep} 100%)`,
       position: "relative", transition: "all 0.8s ease",
     }}>
       <button onClick={onBack} style={{ position: "absolute", top: 20, left: 20, background: "none", border: "none", color: theme.textSecondary, fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 14, cursor: "pointer", zIndex: 30 }}>
@@ -703,7 +701,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
             </h3>
             {["Respirazione 4-4-4", "Grounding 5-4-3-2-1", "Scrittura libera", "Una cosa piccola oggi"].map((t, i) => (
               <div key={i} style={{ padding: "12px 16px", borderRadius: 16, background: theme.bgSecondary, marginBottom: 8, cursor: "pointer", fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 14, color: theme.textSecondary, transition: "all 0.3s ease" }}>
-                {["🌬", "🖐", "✍️", "🌱"][i]} {t}
+                {["◆", "✋", "✎", "◈"][i]} {t}
               </div>
             ))}
             <button onClick={() => setShowToolkit(false)} style={{ marginTop: 16, width: "100%", padding: 12, borderRadius: 50, border: `1px solid ${theme.cardBorder}`, background: "transparent", color: theme.textSecondary, fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 13, cursor: "pointer" }}>
@@ -724,9 +722,9 @@ function SupportPage({ theme, checkInData, onReturn }) {
   const strategy = strategies[Math.floor(Math.random() * strategies.length)] || copingStrategies[4];
   const reflection = reflectionPrompts[Math.floor(Math.random() * reflectionPrompts.length)];
   const sections = [
-    { icon: "💬", title: "Ti ascolto", content: empathy },
-    { icon: "🌿", title: strategy.title, content: strategy.description, source: strategy.source },
-    { icon: "🪞", title: "Uno spunto", content: reflection },
+    { icon: "▶", title: "Ti ascolto", content: empathy },
+    { icon: "◈", title: strategy.title, content: strategy.description, source: strategy.source },
+    { icon: "○", title: "Uno spunto", content: reflection },
   ];
 
   return (
@@ -888,7 +886,7 @@ export default function App() {
     const avgG = newFish.reduce((a, f) => a + f.growth, 0) / newFish.length;
     const raw = 0.4 * avgG + 0.3 * ci + 0.2 * 0.5 + 0.1 * 0.3;
     const smoothedSea = ema(seaState, raw, 0.1);
-    setSeaState(Math.max(seaState, smoothedSea));
+    setSeaState(smoothedSea);
     setPage("support");
   }, [checkIns, fishData, seaState]);
 
@@ -937,7 +935,7 @@ export default function App() {
             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16,
             transition: "all 0.4s ease",
           }} title="Logout">
-            🔒
+            ⊗
           </button>
 
           {/* Button musica */}
@@ -948,7 +946,7 @@ export default function App() {
             transition: "all 0.4s ease",
             opacity: musicEnabled ? 1 : 0.6,
           }} title={musicEnabled ? "Disattiva musica" : "Attiva musica"}>
-            {musicEnabled ? "🎵" : "🔇"}
+            {musicEnabled ? "♫" : "♪"}
           </button>
 
           {/* Button tema */}
@@ -958,7 +956,7 @@ export default function App() {
             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 18,
             transition: "all 0.4s ease",
           }} title={themeName === "notte" ? "Passa all'alba" : "Passa alla notte"}>
-            {themeName === "notte" ? "🌅" : "🌙"}
+            {themeName === "notte" ? "◐" : "◑"}
           </button>
         </div>
       )}
