@@ -1,5 +1,5 @@
 /**
- * 🔐 AuthPage — Interfaccia di login e registrazione
+ * AuthPage — Interfaccia di login e registrazione
  * 
  * Funzionalità:
  * - Toggle tra login e registrazione
@@ -10,7 +10,7 @@
  */
 
 import { useState, useContext } from 'react';
-import { AuthContext } from './auth-context';
+import { AuthContext } from './context/auth-context';
 
 const THEMES = {
   notte: {

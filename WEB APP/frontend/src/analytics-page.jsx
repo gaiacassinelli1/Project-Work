@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "./auth-context";
-import { apiGet, apiPost } from "./api";
+import { AuthContext } from "../context/auth-context";
+import { apiGet, apiPost } from "../api/api";
 
 /**
  * AnalyticsPage — Insights e trend dell'utente
@@ -209,7 +209,7 @@ export function AnalyticsPage({ theme, onBack }) {
                 color: theme.textPrimary,
                 margin: 0,
               }}>
-                {analytics.anxiety_trend < 0 ? "In miglioramento" : analytics.anxiety_trend > 0 ? "📈 In aumento" : "➡️ Stabile"}
+                {analytics.anxiety_trend < 0 ? "In miglioramento" : analytics.anxiety_trend > 0 ? "In aumento" : "Stabile"}
               </p>
               <div style={{
                 fontSize: 13,
@@ -344,12 +344,6 @@ export function AnalyticsPage({ theme, onBack }) {
             boxShadow: theme.cardShadow,
           }}>
             <p style={{
-              fontSize: 48,
-              margin: "0 0 12px",
-            }}>
-              
-            </p>
-            <p style={{
               fontSize: 14,
               color: theme.textSecondary,
               margin: "0 0 16px",
@@ -372,7 +366,7 @@ export function AnalyticsPage({ theme, onBack }) {
                 opacity: exporting ? 0.6 : 1,
               }}
             >
-              {exporting ? "⏳..." : "Sincronizza ora"}
+              {exporting ? "..." : "Sincronizza ora"}
             </button>
           </div>
         )}
@@ -395,7 +389,7 @@ export function AnalyticsPage({ theme, onBack }) {
             onMouseEnter={(e) => e.target.style.borderColor = theme.accentSoft}
             onMouseLeave={(e) => e.target.style.borderColor = theme.cardBorder}
           >
-            ← Torna indietro
+            Torna indietro
           </button>
         </div>
       </div>

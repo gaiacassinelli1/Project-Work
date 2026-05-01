@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef, useContext } from "react";
-import { AuthContext } from "./auth-context";
-import { AnalyticsPage } from "./analytics-page";
+import { AuthContext } from "./context/auth-context_old";
+import { AnalyticsPage } from "./analytics-page_old";
 
 const themes = {
   notte: {

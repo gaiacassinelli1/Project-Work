@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import MareCalmo from './mare-calmo'
-import { AuthPage } from './auth-page'
-import { AuthContext } from './auth-context'
+import { AuthPage } from './pages/auth-page_old'
+import { AuthContext } from './context/auth-context_old'
 import './App.css'
 
 function App() {

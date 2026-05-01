@@ -83,16 +83,16 @@ export function getUserFriendlyError(error) {
 
   // Errori di connessione
   if (message.includes("Failed to fetch")) {
-    return "⚠️ Backend non raggiungibile. Verifica che il server sia in esecuzione su localhost:8000";
+    return "Backend non raggiungibile. Verifica che il server sia in esecuzione su localhost:8000";
   }
   if (message.includes("Timeout")) {
-    return "⏱️ Richiesta scaduta. Il server sta impiegando troppo tempo a rispondere.";
+    return "Richiesta scaduta. Il server sta impiegando troppo tempo a rispondere.";
   }
   if (message.includes("refused")) {
-    return "🔌 Connessione rifiutata. Il backend non è in esecuzione.";
+    return "Connessione rifiutata. Il backend non è in esecuzione.";
   }
   if (message.includes("network")) {
-    return "🌐 Errore di rete. Verifica la tua connessione internet.";
+    return "Errore di rete. Verifica la tua connessione internet.";
   }
 
   // Errori di validazione/autenticazione (dal server)
@@ -104,7 +104,7 @@ export function getUserFriendlyError(error) {
   }
 
   // Default
-  return `❌ ${message}`;
+  return `${message}`;
 }
 
 /**

@@ -1,11 +1,9 @@
 """
-Authentication Dependencies
-Fornisce le dipendenze per proteggere le route FastAPI.
-Migliorato con HTTPAuthCredentials e error handling robusto.
+Compatibile con qualsiasi versione di FastAPI.
+Fornisce le dipendenze per proteggere le route.
 """
 from typing import Optional
 from fastapi import Depends, HTTPException, status, Header
-from fastapi.security import HTTPBearer, HTTPAuthCredentials
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
@@ -15,15 +13,8 @@ from .auth_tokens import verify_token
 from .auth_logger import logger
 
 
-# Security scheme per Swagger/OpenAPI
-security = HTTPBearer(
-    description="Bearer token JWT",
-    auto_error=False  # Gestisci manualmente l'errore
-)
-
-
 async def get_current_user(
-    credentials: Optional[HTTPAuthCredentials] = Depends(security),
+    authorization: str = Header(None),
     db: Session = Depends(get_db),
 ) -> User:
     """
@@ -31,7 +22,7 @@ async def get_current_user(
     Estrae il token JWT dall'header Authorization e restituisce l'utente.
     
     Args:
-        credentials: Credenziali HTTP Bearer (automaticamente estratte)
+        authorization: Header Authorization (Bearer <token>)
         db: Sessione database
         
     Returns:
@@ -41,7 +32,7 @@ async def get_current_user(
         HTTPException: 401 se token non valido, non trovato, o utente non esiste
     """
     # Verifica che le credenziali siano fornite
-    if not credentials:
+    if not authorization:
         logger.warning("Richiesta senza token di autenticazione")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -49,12 +40,23 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    token = credentials.credentials
+    # Estrai il token dal header "Bearer <token>"
+    try:
+        scheme, token = authorization.split()
+        if scheme.lower() != "bearer":
+            raise ValueError("Schema non valido")
+    except ValueError:
+        logger.warning(f"Header Authorization malformato: {authorization}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authorization header malformato",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     
     # Verifica il token JWT
     payload = verify_token(token)
     if payload is None:
-        logger.warning(f"Token non valido o scaduto")
+        logger.warning("Token non valido o scaduto")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token non valido o scaduto",
@@ -99,7 +101,7 @@ async def get_current_user(
 
 
 async def get_current_user_optional(
-    credentials: Optional[HTTPAuthCredentials] = Depends(security),
+    authorization: str = Header(None),
     db: Session = Depends(get_db),
 ) -> Optional[User]:
     """
@@ -108,16 +110,22 @@ async def get_current_user_optional(
     Utile per endpoint che supportano sia accesso autenticato che anonimo.
     
     Args:
-        credentials: Credenziali HTTP Bearer (opzionali)
+        authorization: Header Authorization (Bearer <token>)
         db: Sessione database
         
     Returns:
         User se autenticato, None altrimenti
     """
-    if not credentials:
+    if not authorization:
         return None
     
-    token = credentials.credentials
+    try:
+        scheme, token = authorization.split()
+        if scheme.lower() != "bearer":
+            return None
+    except ValueError:
+        return None
+    
     payload = verify_token(token)
     
     if payload is None:

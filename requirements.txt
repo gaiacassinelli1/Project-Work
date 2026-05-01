@@ -23,5 +23,7 @@ seaborn
 nbconvert
 openpyxl
 jsonwebtoken
+email-validator
+
 
 # pip install --use-deprecated=legacy-resolver -r requirements.txt
