@@ -24,6 +24,6 @@ nbconvert
 openpyxl
 jsonwebtoken
 email-validator
-
+slowapi
 
 # pip install --use-deprecated=legacy-resolver -r requirements.txt
