@@ -8,17 +8,27 @@
  * - Gestione automatica del token Bearer
  */
 
-import { fetchWithRetry, getErrorMessage, API_CONFIG } from '../api-config';
+import { fetchWithRetry, getErrorMessage, API_CONFIG } from './api-config.jsx';
+import type { 
+  ApiResponse, 
+  AuthResponse, 
+  UserResponse, 
+  RegisterRequest,
+  LoginRequest,
+  RefreshTokenRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest
+} from '../types.ts';
 
 /**
  * Effettua una richiesta API generica
  */
 export async function apiRequest(
-  endpoint,
-  options = {},
-  token = null
-) {
-  const headers = options.headers || {};
+  endpoint: string,
+  options: RequestInit = {},
+  token: string | null = null
+): Promise<unknown> {
+  const headers: HeadersInit = options.headers || {};
 
   // Aggiungi il token se fornito
   if (token) {
@@ -31,7 +41,7 @@ export async function apiRequest(
   });
 
   if (!result.ok) {
-    const errorInfo = result.message || getErrorMessage(result.error, result.status);
+    const errorInfo = getErrorMessage(result.error, result.status);
     throw new Error(errorInfo.message || JSON.stringify(result.error));
   }
 
@@ -41,14 +51,21 @@ export async function apiRequest(
 /**
  * Effettua una richiesta GET
  */
-export async function apiGet(endpoint, token = null) {
+export async function apiGet(
+  endpoint: string,
+  token: string | null = null
+): Promise<unknown> {
   return apiRequest(endpoint, { method: 'GET' }, token);
 }
 
 /**
  * Effettua una richiesta POST
  */
-export async function apiPost(endpoint, data = {}, token = null) {
+export async function apiPost(
+  endpoint: string,
+  data: Record<string, unknown> = {},
+  token: string | null = null
+): Promise<unknown> {
   return apiRequest(
     endpoint,
     {
@@ -62,7 +79,11 @@ export async function apiPost(endpoint, data = {}, token = null) {
 /**
  * Effettua una richiesta PUT
  */
-export async function apiPut(endpoint, data = {}, token = null) {
+export async function apiPut(
+  endpoint: string,
+  data: Record<string, unknown> = {},
+  token: string | null = null
+): Promise<unknown> {
   return apiRequest(
     endpoint,
     {
@@ -76,7 +97,10 @@ export async function apiPut(endpoint, data = {}, token = null) {
 /**
  * Effettua una richiesta DELETE
  */
-export async function apiDelete(endpoint, token = null) {
+export async function apiDelete(
+  endpoint: string,
+  token: string | null = null
+): Promise<unknown> {
   return apiRequest(endpoint, { method: 'DELETE' }, token);
 }
 
@@ -88,7 +112,11 @@ export const authAPI = {
   /**
    * Registra un nuovo utente
    */
-  async register(email, password, locale = 'it') {
+  async register(
+    email: string,
+    password: string,
+    locale: string = 'it'
+  ): Promise<ApiResponse<AuthResponse>> {
     try {
       console.log('[AuthAPI] Registrazione:', email);
       
@@ -96,7 +124,7 @@ export const authAPI = {
         email,
         password,
         locale,
-      });
+      }) as AuthResponse;
 
       console.log('[AuthAPI] Registrazione riuscita:', email);
       return {
@@ -104,10 +132,11 @@ export const authAPI = {
         data,
       };
     } catch (error) {
-      console.error('[AuthAPI] Errore registrazione:', error.message);
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      console.error('[AuthAPI] Errore registrazione:', message);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -115,14 +144,17 @@ export const authAPI = {
   /**
    * Login utente
    */
-  async login(email, password) {
+  async login(
+    email: string,
+    password: string
+  ): Promise<ApiResponse<AuthResponse>> {
     try {
       console.log('[AuthAPI] Login:', email);
       
       const data = await apiPost('/auth/login', {
         email,
         password,
-      });
+      }) as AuthResponse;
 
       console.log('[AuthAPI] Login riuscito:', email);
       return {
@@ -130,10 +162,11 @@ export const authAPI = {
         data,
       };
     } catch (error) {
-      console.error('[AuthAPI] Errore login:', error.message);
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      console.error('[AuthAPI] Errore login:', message);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -141,13 +174,15 @@ export const authAPI = {
   /**
    * Rinnova l'access token usando il refresh token
    */
-  async refreshToken(refreshToken) {
+  async refreshToken(
+    refreshToken: string
+  ): Promise<ApiResponse<AuthResponse>> {
     try {
       console.log('[AuthAPI] Refresh token...');
       
       const data = await apiPost('/auth/refresh', {
         refresh_token: refreshToken,
-      });
+      }) as AuthResponse;
 
       console.log('[AuthAPI] Token rinnovato');
       return {
@@ -155,10 +190,11 @@ export const authAPI = {
         data,
       };
     } catch (error) {
-      console.error('[AuthAPI] Errore refresh token:', error.message);
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      console.error('[AuthAPI] Errore refresh token:', message);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -166,21 +202,22 @@ export const authAPI = {
   /**
    * Ottiene i dati dell'utente autenticato
    */
-  async getMe(token) {
+  async getMe(token: string): Promise<ApiResponse<UserResponse>> {
     try {
       console.log('[AuthAPI] Fetch user data');
       
-      const data = await apiGet('/auth/me', token);
+      const data = await apiGet('/auth/me', token) as UserResponse;
 
       return {
         success: true,
         data,
       };
     } catch (error) {
-      console.error('[AuthAPI] Errore fetch user:', error.message);
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      console.error('[AuthAPI] Errore fetch user:', message);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -188,7 +225,7 @@ export const authAPI = {
   /**
    * Logout (backend side)
    */
-  async logout(token) {
+  async logout(token: string): Promise<ApiResponse<unknown>> {
     try {
       console.log('[AuthAPI] Logout');
       
@@ -199,11 +236,12 @@ export const authAPI = {
         data,
       };
     } catch (error) {
-      console.error('[AuthAPI] Errore logout:', error.message);
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      console.error('[AuthAPI] Errore logout:', message);
       // Logout fallisce ma comunque elimina il token
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -211,7 +249,7 @@ export const authAPI = {
   /**
    * Richiesta di reset password
    */
-  async forgotPassword(email) {
+  async forgotPassword(email: string): Promise<ApiResponse<unknown>> {
     try {
       console.log('[AuthAPI] Forgot password:', email);
       
@@ -224,10 +262,11 @@ export const authAPI = {
         data,
       };
     } catch (error) {
-      console.error('[AuthAPI] Errore forgot password:', error.message);
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      console.error('[AuthAPI] Errore forgot password:', message);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -235,7 +274,10 @@ export const authAPI = {
   /**
    * Reset password con token
    */
-  async resetPassword(token, newPassword) {
+  async resetPassword(
+    token: string,
+    newPassword: string
+  ): Promise<ApiResponse<unknown>> {
     try {
       console.log('[AuthAPI] Reset password...');
       
@@ -249,10 +291,11 @@ export const authAPI = {
         data,
       };
     } catch (error) {
-      console.error('[AuthAPI] Errore reset password:', error.message);
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
+      console.error('[AuthAPI] Errore reset password:', message);
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -260,7 +303,7 @@ export const authAPI = {
   /**
    * Health check
    */
-  async healthCheck() {
+  async healthCheck(): Promise<ApiResponse<unknown>> {
     try {
       const data = await apiGet('/auth/health');
       return {
@@ -268,9 +311,10 @@ export const authAPI = {
         data,
       };
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
       return {
         success: false,
-        error: error.message,
+        error: message,
       };
     }
   },
@@ -284,7 +328,11 @@ export const gameAPI = {
   /**
    * Registra un evento (check-in, etc)
    */
-  async createEvent(eventType, metadata, token) {
+  async createEvent(
+    eventType: string,
+    metadata: Record<string, unknown>,
+    token: string
+  ): Promise<unknown> {
     return apiPost(
       '/events',
       {
@@ -298,42 +346,42 @@ export const gameAPI = {
   /**
    * Fetcha i pesci dell'utente
    */
-  async getFish(userId, token) {
+  async getFish(userId: string, token: string): Promise<unknown> {
     return apiGet(`/user/${userId}/fish`, token);
   },
 
   /**
    * Fetcha lo stato del mare
    */
-  async getSeaState(userId, token) {
+  async getSeaState(userId: string, token: string): Promise<unknown> {
     return apiGet(`/user/${userId}/sea-state`, token);
   },
 
   /**
    * Ricalcola lo stato (pesci e mare)
    */
-  async computeState(userId, token) {
+  async computeState(userId: string, token: string): Promise<unknown> {
     return apiPost(`/user/${userId}/compute-state`, {}, token);
   },
 
   /**
    * Esporta i dati dell'utente
    */
-  async exportData(userId, token) {
+  async exportData(userId: string, token: string): Promise<unknown> {
     return apiGet(`/user/${userId}/export-data`, token);
   },
 
   /**
    * Sincronizza con MongoDB
    */
-  async syncToMongoDB(userId, token) {
+  async syncToMongoDB(userId: string, token: string): Promise<unknown> {
     return apiPost(`/user/${userId}/export-mongodb`, {}, token);
   },
 
   /**
    * Fetcha analytics
    */
-  async getAnalytics(userId, token) {
+  async getAnalytics(userId: string, token: string): Promise<unknown> {
     return apiGet(`/user/${userId}/analytics`, token);
   },
 };

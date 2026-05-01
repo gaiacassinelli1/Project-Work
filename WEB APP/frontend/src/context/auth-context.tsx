@@ -13,24 +13,25 @@
  * Monitora l'expiry del token e lo rinfresca automaticamente
  */
 
-import { createContext, useState, useCallback, useEffect } from 'react';
+import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { authAPI } from '../api/api';
 import { logAPIConfig } from '../api/api-config';
+import type { AuthContextType, User } from '../types';
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 // Helper per decodare JWT e leggere l'expiry
-function getTokenExpiry(token) {
+function getTokenExpiry(token: string): number | null {
   try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
       atob(base64)
         .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .map((c: string) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
         .join('')
     );
-    const payload = JSON.parse(jsonPayload);
+    const payload = JSON.parse(jsonPayload) as { exp: number };
     return payload.exp * 1000; // Converti a millisecondi
   } catch (e) {
     console.error('[Auth] Errore nel decodare token:', e);
@@ -38,13 +39,13 @@ function getTokenExpiry(token) {
   }
 }
 
-export function AuthProvider({ children }) {
-  const [token, setToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [tokenRefreshTimer, setTokenRefreshTimer] = useState(null);
+export function AuthProvider({ children }: { children: ReactNode }): ReactNode {
+  const [token, setToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [tokenRefreshTimer, setTokenRefreshTimer] = useState<NodeJS.Timeout | null>(null);
 
   // Carica i token dal localStorage al mount
   useEffect(() => {
@@ -56,7 +57,7 @@ export function AuthProvider({ children }) {
 
     if (savedToken && savedUser) {
       try {
-        const parsedUser = JSON.parse(savedUser);
+        const parsedUser = JSON.parse(savedUser) as User;
         setToken(savedToken);
         setRefreshToken(savedRefreshToken);
         setUser(parsedUser);
@@ -82,10 +83,10 @@ export function AuthProvider({ children }) {
    * Rinnova l'access token usando il refresh token
    */
   const refreshAccessToken = useCallback(
-    async (currentRefreshToken) => {
+    async (currentRefreshToken: string | null): Promise<boolean> => {
       if (!currentRefreshToken) {
         console.warn('[Auth] Refresh token non disponibile');
-        logout();
+        await logout();
         return false;
       }
 
@@ -94,7 +95,7 @@ export function AuthProvider({ children }) {
         
         const result = await authAPI.refreshToken(currentRefreshToken);
 
-        if (result.success) {
+        if (result.success && result.data) {
           const {
             access_token: newAccessToken,
             refresh_token: newRefreshToken,
@@ -114,12 +115,12 @@ export function AuthProvider({ children }) {
           return true;
         } else {
           console.warn('[Auth] Errore nel refresh:', result.error);
-          logout();
+          await logout();
           return false;
         }
       } catch (err) {
         console.error('[Auth] Errore durante refresh:', err);
-        logout();
+        await logout();
         return false;
       }
     },
@@ -130,7 +131,7 @@ export function AuthProvider({ children }) {
    * Imposta un timer per rinnovare il token 5 minuti prima della scadenza
    */
   const scheduleTokenRefresh = useCallback(
-    (accessToken, currentRefreshToken) => {
+    (accessToken: string, currentRefreshToken: string | null) => {
       // Pulisci il timer precedente
       if (tokenRefreshTimer) {
         clearTimeout(tokenRefreshTimer);
@@ -174,7 +175,7 @@ export function AuthProvider({ children }) {
    * Registra un nuovo utente
    */
   const register = useCallback(
-    async (email, password, locale = 'it') => {
+    async (email: string, password: string, locale: string = 'it'): Promise<{ success: boolean; error?: string }> => {
       setLoading(true);
       setError(null);
 
@@ -183,7 +184,7 @@ export function AuthProvider({ children }) {
         
         const result = await authAPI.register(email, password, locale);
 
-        if (result.success) {
+        if (result.success && result.data) {
           const {
             access_token,
             refresh_token,
@@ -193,7 +194,7 @@ export function AuthProvider({ children }) {
 
           setToken(access_token);
           setRefreshToken(refresh_token);
-          setUser({ email: userEmail, user_id });
+          setUser({ email: userEmail, user_id } as User);
 
           localStorage.setItem('auth_token', access_token);
           localStorage.setItem('auth_refresh_token', refresh_token);
@@ -216,7 +217,7 @@ export function AuthProvider({ children }) {
           return { success: false, error: errorMsg };
         }
       } catch (err) {
-        const errorMsg = err.message || 'Errore di connessione';
+        const errorMsg = err instanceof Error ? err.message : 'Errore di connessione';
         setError(errorMsg);
         console.error('[Auth] Errore registrazione:', err);
         return { success: false, error: errorMsg };
@@ -231,7 +232,7 @@ export function AuthProvider({ children }) {
    * Login utente
    */
   const login = useCallback(
-    async (email, password) => {
+    async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
       setLoading(true);
       setError(null);
 
@@ -240,7 +241,7 @@ export function AuthProvider({ children }) {
         
         const result = await authAPI.login(email, password);
 
-        if (result.success) {
+        if (result.success && result.data) {
           const {
             access_token,
             refresh_token,
@@ -250,7 +251,7 @@ export function AuthProvider({ children }) {
 
           setToken(access_token);
           setRefreshToken(refresh_token);
-          setUser({ email: userEmail, user_id });
+          setUser({ email: userEmail, user_id } as User);
 
           localStorage.setItem('auth_token', access_token);
           localStorage.setItem('auth_refresh_token', refresh_token);
@@ -273,7 +274,7 @@ export function AuthProvider({ children }) {
           return { success: false, error: errorMsg };
         }
       } catch (err) {
-        const errorMsg = err.message || 'Errore di connessione';
+        const errorMsg = err instanceof Error ? err.message : 'Errore di connessione';
         setError(errorMsg);
         console.error('[Auth] Errore login:', err);
         return { success: false, error: errorMsg };
@@ -322,7 +323,7 @@ export function AuthProvider({ children }) {
   /**
    * Valida il token (utile per verificare se ancora valido)
    */
-  const validateToken = useCallback(async () => {
+  const validateToken = useCallback(async (): Promise<boolean> => {
     if (!token) {
       return false;
     }
@@ -335,7 +336,7 @@ export function AuthProvider({ children }) {
         return true;
       } else {
         console.warn('[Auth] Token non valido, logout');
-        logout();
+        await logout();
         return false;
       }
     } catch (err) {
@@ -355,22 +356,22 @@ export function AuthProvider({ children }) {
     });
   }, [token, refreshToken, user, loading]);
 
+  const value: AuthContextType = {
+    token,
+    refreshToken,
+    user,
+    loading,
+    error,
+    register,
+    login,
+    logout,
+    validateToken,
+    refreshAccessToken,
+    isAuthenticated: !!token,
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        token,
-        refreshToken,
-        user,
-        loading,
-        error,
-        register,
-        login,
-        logout,
-        validateToken,
-        refreshAccessToken,
-        isAuthenticated: !!token,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "./context/auth-context";
-import { apiGet, apiPost } from "./api/api";
+import type { ReactNode } from 'react'
+import type { AnalyticsPageProps } from '../types'
+
+export function AnalyticsPage({ theme, onBack }: AnalyticsPageProps): ReactNode {
 
 /**
  * AnalyticsPage — Insights e trend dell'utente
@@ -395,4 +396,5 @@ export function AnalyticsPage({ theme, onBack }) {
       </div>
     </div>
   );
+}
 }
