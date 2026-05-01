@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../context/auth-context_old";
+import { AuthContext } from "../context/auth-context";
 
 /**
  * AuthPage — Pagina di login e registrazione
