@@ -1,6 +1,8 @@
-import { useState, useContext } from "react";
-import { AuthContext } from "../context/auth-context";
+import type { ReactNode } from 'react'
+import type { AuthPageProps } from '../types'
 
+export function AuthPage({  }: AuthPageProps): ReactNode {
+  
 /**
  * AuthPage — Pagina di login e registrazione
  * Design coerente con il resto dell'app (tema notte/alba, animazioni, font)
@@ -312,4 +314,5 @@ export function AuthPage({ theme: initialTheme, onAuthSuccess }) {
       `}</style>
     </div>
   );
+}
 }

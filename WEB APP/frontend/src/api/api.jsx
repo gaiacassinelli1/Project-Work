@@ -3,11 +3,12 @@
  * 
  * Fornisce:
  * - apiRequest: funzione base con error handling
- * - authAPI: funzioni specifiche per auth (register, login, getMe)
+ * - authAPI: funzioni specifiche per auth (register, login, getMe, refreshToken)
+ * - gameAPI: funzioni per il gameplay
  * - Gestione automatica del token Bearer
  */
 
-import { fetchWithRetry, getErrorMessage, API_CONFIG } from './api-config';
+import { fetchWithRetry, getErrorMessage, API_CONFIG } from '../api-config';
 
 /**
  * Effettua una richiesta API generica
@@ -79,9 +80,9 @@ export async function apiDelete(endpoint, token = null) {
   return apiRequest(endpoint, { method: 'DELETE' }, token);
 }
 
-// ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
 // Authentication API
-// ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
 
 export const authAPI = {
   /**
@@ -138,6 +139,31 @@ export const authAPI = {
   },
 
   /**
+   * Rinnova l'access token usando il refresh token
+   */
+  async refreshToken(refreshToken) {
+    try {
+      console.log('[AuthAPI] Refresh token...');
+      
+      const data = await apiPost('/auth/refresh', {
+        refresh_token: refreshToken,
+      });
+
+      console.log('[AuthAPI] Token rinnovato');
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      console.error('[AuthAPI] Errore refresh token:', error.message);
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  },
+
+  /**
    * Ottiene i dati dell'utente autenticato
    */
   async getMe(token) {
@@ -183,6 +209,55 @@ export const authAPI = {
   },
 
   /**
+   * Richiesta di reset password
+   */
+  async forgotPassword(email) {
+    try {
+      console.log('[AuthAPI] Forgot password:', email);
+      
+      const data = await apiPost('/auth/forgot-password', {
+        email,
+      });
+
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      console.error('[AuthAPI] Errore forgot password:', error.message);
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  },
+
+  /**
+   * Reset password con token
+   */
+  async resetPassword(token, newPassword) {
+    try {
+      console.log('[AuthAPI] Reset password...');
+      
+      const data = await apiPost('/auth/reset-password', {
+        token,
+        new_password: newPassword,
+      });
+
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      console.error('[AuthAPI] Errore reset password:', error.message);
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  },
+
+  /**
    * Health check
    */
   async healthCheck() {
@@ -201,9 +276,9 @@ export const authAPI = {
   },
 };
 
-// ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
 // Game API
-// ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
 
 export const gameAPI = {
   /**
