@@ -1,39 +1,7 @@
-import { useState, useEffect, useCallback, useMemo, useRef, useContext, FC, ReactNode, CSSProperties } from "react";
-import { AuthContext } from "./auth-context";
-import { AnalyticsPage } from "./analytics-page.jsx";
-
-// ========== TYPE DEFINITIONS ==========
-
-interface Theme {
-  name: string;
-  bgPrimary: string;
-  bgSecondary: string;
-  bgGradientTop: string;
-  bgGradientBottom: string;
-  seaDeep: string;
-  seaMid: string;
-  seaLight: string;
-  sand: string;
-  palm: string;
-  rock: string;
-  accentSoft: string;
-  accentGlow: string;
-  textPrimary: string;
-  textSecondary: string;
-  textMuted: string;
-  cardBg: string;
-  cardBorder: string;
-  cardShadow: string;
-  particleColor: string;
-}
-
-interface Bubble {
-  id: string;
-  cx: number;
-  delay: number;
-  dur: number;
-  r: number;
-}
+import { useState, useEffect, useCallback, useMemo, useRef, FC, ReactNode, CSSProperties } from "react";
+import { useAuth } from "./auth-context";
+import type { Theme, CheckInData, FishData } from "./types";
+import { AnalyticsPage } from "./analytics-page";
 
 interface SeaInfo {
   label: string;
@@ -41,46 +9,6 @@ interface SeaInfo {
   waveSpeed: number;
   particles: boolean;
 }
-
-interface FishData {
-  dimension: string;
-  growth: number;
-}
-
-interface FishVisual extends FishData {
-  i: number;
-  color: string;
-  accent: string;
-  size: number;
-  variant: number;
-  stage: string;
-}
-
-interface CheckInData {
-  mood: number;
-  anxiety: number;
-  energy: number;
-  note: string;
-  timestamp: number;
-}
-
-interface CopingStrategy {
-  trigger: string;
-  title: string;
-  description: string;
-  source: string;
-}
-
-interface PageType {
-  onboarding: "onboarding";
-  sea: "sea";
-  island: "island";
-  support: "support";
-  progress: "progress";
-  analytics: "analytics";
-}
-
-// ========== THEME CONFIGURATIONS ==========
 
 const themes: Record<string, Theme> = {
   notte: {
@@ -105,14 +33,14 @@ const themes: Record<string, Theme> = {
   },
 };
 
-const EVENT_WEIGHTS = { check_in: 0.02, micro_action: 0.05, reflection: 0.01 };
+const EVENT_WEIGHTS: Record<string, number> = { check_in: 0.02, micro_action: 0.05, reflection: 0.01 };
 const EMA_ALPHA = 0.3;
-function ema(prev, curr, alpha = EMA_ALPHA) { return alpha * curr + (1 - alpha) * prev; }
-function discretizeVisual(g) {
+function ema(prev: number, curr: number, alpha: number = EMA_ALPHA): number { return alpha * curr + (1 - alpha) * prev; }
+function discretizeVisual(g: number): string {
   if (g < 0.2) return "small"; if (g < 0.4) return "medium";
   if (g < 0.6) return "grown"; if (g < 0.8) return "large"; return "adult";
 }
-function discretizeSea(s) {
+function discretizeSea(s: number): SeaInfo {
   if (s < 0.3) return { label: "neutro", light: 0.4, waveSpeed: 0.5, particles: false };
   if (s < 0.5) return { label: "luminoso", light: 0.55, waveSpeed: 0.4, particles: false };
   if (s < 0.7) return { label: "calmo", light: 0.7, waveSpeed: 0.3, particles: true };
@@ -120,19 +48,19 @@ function discretizeSea(s) {
   return { label: "armonioso", light: 1.0, waveSpeed: 0.15, particles: true };
 }
 
-const copingStrategies = [
+const copingStrategies: Array<{ trigger: string; title: string; description: string; source: string }> = [
   { trigger: "high_anxiety", title: "Respirazione 4-4-4", description: "Inspira per 4 secondi, trattieni per 4, espira per 4. Ripeti 3 volte.", source: "Ma et al., 2017" },
   { trigger: "high_anxiety", title: "Grounding 5-4-3-2-1", description: "Nota 5 cose che vedi, 4 che tocchi, 3 che senti, 2 che odori, 1 che gusti.", source: "Bhandari, 2019" },
   { trigger: "low_energy", title: "Micro-movimento", description: "Alzati, fai 5 respiri profondi e stira le braccia verso l'alto per 30 secondi.", source: "Ratey, 2008" },
   { trigger: "low_energy", title: "Compassione verso te stesso", description: "Scrivi una cosa che ti diresti se fossi il tuo migliore amico.", source: "Neff, 2003" },
   { trigger: "neutral", title: "Micro-riflessione", description: "Cosa ti ha dato energia oggi? Anche una cosa piccolissima conta.", source: "Fredrickson, 2001" },
 ];
-const empatheticMessages = {
+const empatheticMessages: Record<string, string[]> = {
   high: ["Quello che senti è reale, ed è umano. L'ansia da prestazione non definisce chi sei.", "Sentire pressione non significa essere deboli. Stai affrontando qualcosa di impegnativo.", "È normale sentirsi così. Il fatto che tu sia qui a riconoscerlo è già un passo importante."],
   medium: ["Oggi c'è un po' di agitazione, ed è comprensibile. Non devi fare nulla di straordinario.", "Anche nei giorni medi, prenderti un momento per te ha valore.", "Non serve che ogni giorno sia perfetto. Stai andando bene."],
   low: ["Oggi sembra un giorno più tranquillo. Goditelo, te lo meriti.", "La calma è movimento. Stai facendo il tuo percorso.", "Che bello avere un momento di pace. Resta qui quanto vuoi."],
 };
-const reflectionPrompts = [
+const reflectionPrompts: string[] = [
   "Cosa diresti a un amico che si sente come te oggi?",
   "C'è qualcosa di piccolo che puoi fare per te stesso in questo momento?",
   "Cosa ti ha dato energia questa settimana, anche solo per un attimo?",
@@ -142,7 +70,9 @@ const reflectionPrompts = [
 ];
 
 // IMPROVED FISH SVG — 3 variants with gradients
-function FishBody({ color, accent, variant, id }) {
+interface FishBodyProps { color: string; accent: string; variant: number; id: string; }
+
+const FishBody: FC<FishBodyProps> = ({ color, accent, variant, id }) {
   if (variant === 1) {
     return (
       <g>
@@ -239,7 +169,9 @@ function SwimmingFish({ startX, startY, color, accent, size, variant, duration, 
   );
 }
 
-function Bubbles({ count, theme }) {
+interface BubblesProps { count: number; theme: Theme; }
+
+const Bubbles: FC<BubblesProps> = ({ count, theme }) {
   const bubbles = useMemo(() =>
     Array.from({ length: count }, (_, i) => ({
       id: `bubble-${i}`,
@@ -257,7 +189,9 @@ function Bubbles({ count, theme }) {
   </>;
 }
 
-function Seaweed({ x, color, h }) {
+interface SeaweedProps { x: number; color: string; h?: number; }
+
+const Seaweed: FC<SeaweedProps> = ({ x, color, h }) {
   const height = h || 150;
   return (
     <g>
@@ -274,7 +208,9 @@ function Seaweed({ x, color, h }) {
 }
 
 // ISLAND SVG
-function IslandSVG({ theme, lanternGlow, dayCount }) {
+interface IslandSVGProps { theme: Theme; lanternGlow: number; dayCount: number; }
+
+const IslandSVG: FC<IslandSVGProps> = ({ theme, lanternGlow, dayCount }) {
   const hasPlant = dayCount >= 3;
   const hasBench = dayCount >= 7;
   return (
@@ -444,8 +380,13 @@ function IslandSVG({ theme, lanternGlow, dayCount }) {
 
 // PAGES
 
-function OnboardingPage({ theme, onComplete }) {
-  const [step, setStep] = useState(0);
+interface OnboardingPageProps { theme: Theme; onComplete: () => void; }
+
+const OnboardingPage: FC<OnboardingPageProps> = ({
+  theme,
+  onComplete,
+}): JSX.Element => { theme, onComplete }) {
+  const [step, setStep] = useState<number>(0);
   const steps = [
     { text: "Il mare rappresenta il tuo stato interiore.", sub: "Ogni onda, ogni riflesso racconta qualcosa di te." },
     { text: "Sull'isola puoi fermarti ad ascoltarti.", sub: "Pochi minuti, senza giudizio, senza fretta." },
@@ -482,9 +423,11 @@ function OnboardingPage({ theme, onComplete }) {
   );
 }
 
-function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics }) {
+interface SeaPageProps { theme: Theme; checkIns: CheckInData[]; fishData: FishData[]; seaState: number; setSeaState: (value: number) => void; setCheckIns: (checkIns: CheckInData[]) => void; setFishData: (fish: FishData[]) => void; setPage: (page: string) => void; onOpenAnalytics: () => void; }
+
+const SeaPage: FC<SeaPageProps> = ({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics }) {
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
-  const audioRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [resetToken] = useState(() => Math.random());
   
   const musicURL = theme.name === "notte" 
@@ -665,11 +608,13 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
   );
 }
 
-function IslandPage({ theme, onSubmit, onBack, dayCount }) {
-  const [step, setStep] = useState(0);
-  const [mood, setMood] = useState(3);
+interface IslandPageProps { theme: Theme; seaState: number; setSeaState: (value: number) => void; checkIns: CheckInData[]; setCheckIns: (checkIns: CheckInData[]) => void; fishData: FishData[]; setFishData: (fish: FishData[]) => void; onBack: () => void; onNext: () => void; }
+
+const IslandPage: FC<IslandPageProps> = ({ theme, onSubmit, onBack, dayCount }) {
+  const [step, setStep] = useState<number>(0);
+  const [mood, setMood] = useState<number>(3);
   const [anxiety, setAnxiety] = useState(3);
-  const [energy, setEnergy] = useState(2);
+  const [energy, setEnergy] = useState<number>(2);
   const [note, setNote] = useState("");
   const [showToolkit, setShowToolkit] = useState(false);
   const moodEmojis = ["😌", "🙂", "😐", "😟", "😣"];
@@ -795,7 +740,9 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
   );
 }
 
-function SupportPage({ theme, checkInData, onReturn }) {
+interface SupportPageProps { theme: Theme; checkIns: CheckInData[]; onBack: () => void; }
+
+const SupportPage: FC<SupportPageProps> = ({ theme, checkInData, onReturn }) {
   const level = checkInData.anxiety >= 4 ? "high" : checkInData.anxiety >= 2 ? "medium" : "low";
   const empathy = empatheticMessages[level][Math.floor(Math.random() * empatheticMessages[level].length)];
   const trigger = checkInData.anxiety >= 4 ? "high_anxiety" : checkInData.energy <= 1 ? "low_energy" : "neutral";
@@ -832,7 +779,9 @@ function SupportPage({ theme, checkInData, onReturn }) {
   );
 }
 
-function ProgressPage({ theme, checkIns, fishData, seaState, onBack }) {
+interface ProgressPageProps { theme: Theme; checkIns: CheckInData[]; fishData: FishData[]; seaState: number; onBack: () => void; }
+
+const ProgressPage: FC<ProgressPageProps> = ({ theme, checkIns, fishData, seaState, onBack }) {
   const seaInfo = discretizeSea(seaState);
   const [showDetail, setShowDetail] = useState(false);
   const avgAnxiety = checkIns.length > 0 ? (checkIns.reduce((a, c) => a + c.anxiety, 0) / checkIns.length).toFixed(1) : "—";
@@ -936,19 +885,19 @@ function ProgressPage({ theme, checkIns, fishData, seaState, onBack }) {
 }
 
 // MAIN APP
-export default function App() {
-  const auth = useContext(AuthContext);
-  const [themeName, setThemeName] = useState("notte");
-  const [musicEnabled, setMusicEnabled] = useState(false);
-  const [page, setPage] = useState("onboarding");
-  const [checkIns, setCheckIns] = useState([]);
+const App: FC = (): JSX.Element => {
+  const { user, logout, login } = useAuth();
+  const [themeName, setThemeName] = useState<string>("notte");
+  const [musicEnabled, setMusicEnabled] = useState<boolean>(false);
+  const [page, setPage] = useState<string>("onboarding");
+  const [checkIns, setCheckIns] = useState<CheckInData[]>([]);
   const [lastCheckIn, setLastCheckIn] = useState(null);
   const [fishData, setFishData] = useState([
     { dimension: "studio", growth: 0.05 },
     { dimension: "lavoro", growth: 0.02 },
     { dimension: "benessere", growth: 0.03 },
   ]);
-  const [seaState, setSeaState] = useState(0.15);
+  const [seaState, setSeaState] = useState<number>(0.15);
   const [seaKey, setSeaKey] = useState(0);
   const theme = themes[themeName];
 
@@ -996,7 +945,7 @@ export default function App() {
           display: "flex", gap: 12, alignItems: "center",
         }}>
           {/* Email dell'utente loggato */}
-          {auth.user && (
+          {user && (
             <div style={{
               padding: "8px 14px", borderRadius: 50,
               background: `${theme.cardBg}cc`, backdropFilter: "blur(10px)",
@@ -1005,12 +954,12 @@ export default function App() {
               fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif",
               maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
             }}>
-              {auth.user.email}
+              {user?.email}
             </div>
           )}
 
           {/* Button logout */}
-          <button onClick={() => auth.logout()} style={{
+          <button onClick={() => logout()} style={{
             width: 40, height: 40, borderRadius: "50%",
             border: `1px solid ${theme.cardBorder}`, background: `${theme.cardBg}cc`, backdropFilter: "blur(10px)",
             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16,
@@ -1051,3 +1000,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;

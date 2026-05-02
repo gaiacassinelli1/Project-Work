@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./mare-calmo.tsx";
-import { AuthProvider } from "./auth-context";
+import App from "./mare-calmo";
+import { AuthProvider } from "./auth-context-FIXED";
+import "./index.css";
 
 // Verifica che root element esista
 const rootElement = document.getElementById("root");
@@ -10,7 +11,8 @@ if (!rootElement) {
 }
 
 // Render dell'applicazione con Provider di autenticazione
-ReactDOM.createRoot(rootElement).render(
+const root = ReactDOM.createRoot(rootElement);
+root.render(
   <React.StrictMode>
     <AuthProvider>
       <App />

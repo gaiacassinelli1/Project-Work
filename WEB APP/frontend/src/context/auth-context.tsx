@@ -1,33 +1,47 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
+import { createContext, ReactNode, useState, useEffect, useContext, FC } from "react";
 
-interface User {
+// ========== TYPE DEFINITIONS ==========
+
+export interface User {
   email: string;
   uid: string;
+  name?: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
+  isAuthenticated: boolean;
 }
 
+// ========== CONTEXT CREATION ==========
+
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// ========== PROVIDER COMPONENT ==========
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Simula autenticazione da localStorage o servizio
+    // Simula caricamento da localStorage o servizio autenticazione
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser: User = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Failed to parse stored user:", error);
+        localStorage.removeItem("user");
+      }
     }
     setLoading(false);
   }, []);
@@ -35,35 +49,70 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (email: string, password: string): Promise<void> => {
     setLoading(true);
     try {
-      // Implementazione autenticazione
-      const userData: User = { email, uid: `uid-${Date.now()}` };
+      // TODO: Implementare login con backend
+      const userData: User = {
+        email,
+        uid: `uid-${Date.now()}`,
+        name: email.split("@")[0],
+      };
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
   const logout = async (): Promise<void> => {
-    setUser(null);
-    localStorage.removeItem("user");
+    try {
+      // TODO: Implementare logout con backend
+      setUser(null);
+      localStorage.removeItem("user");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      throw error;
+    }
   };
 
   const signup = async (email: string, password: string): Promise<void> => {
     setLoading(true);
     try {
-      // Implementazione signup
-      const userData: User = { email, uid: `uid-${Date.now()}` };
+      // TODO: Implementare signup con backend
+      const userData: User = {
+        email,
+        uid: `uid-${Date.now()}`,
+        name: email.split("@")[0],
+      };
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
+    } catch (error) {
+      console.error("Signup failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signup }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
+  const value: AuthContextType = {
+    user,
+    loading,
+    login,
+    logout,
+    signup,
+    isAuthenticated: user !== null,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+// ========== CUSTOM HOOK ==========
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth deve essere usato dentro un AuthProvider");
+  }
+  return context;
+};

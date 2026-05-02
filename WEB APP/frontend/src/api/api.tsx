@@ -1,387 +1,194 @@
-/**
- * 🔐 API Utilities — Funzioni per l'interazione con l'API di autenticazione
- * 
- * Fornisce:
- * - apiRequest: funzione base con error handling
- * - authAPI: funzioni specifiche per auth (register, login, getMe, refreshToken)
- * - gameAPI: funzioni per il gameplay
- * - Gestione automatica del token Bearer
- */
+// ========== API TYPES ==========
 
-import { fetchWithRetry, getErrorMessage, API_CONFIG } from './api-config.tsx';
-import type { 
-  ApiResponse, 
-  AuthResponse, 
-  UserResponse, 
-  RegisterRequest,
-  LoginRequest,
-  RefreshTokenRequest,
-  ForgotPasswordRequest,
-  ResetPasswordRequest
-} from '../types.ts';
+export interface RequestInit {
+  headers?: HeadersInit;
+  [key: string]: unknown;
+}
 
-/**
- * Effettua una richiesta API generica
- */
-export async function apiRequest(
-  endpoint: string,
-  options: RequestInit = {},
-  token: string | null = null
-): Promise<unknown> {
-  const headers: HeadersInit = options.headers || {};
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  status: number;
+}
 
-  // Aggiungi il token se fornito
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+export interface AuthResponse {
+  token: string;
+  user: {
+    email: string;
+    uid: string;
+    name?: string;
+  };
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  name?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RefreshTokenRequest {
+  token: string;
+}
+
+export interface UserResponse {
+  email: string;
+  uid: string;
+  name?: string;
+  createdAt?: string;
+}
+
+// ========== API CONFIG ==========
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
   }
+  if (typeof error === "string") {
+    return error;
+  }
+  return "An unknown error occurred";
+}
 
-  const result = await fetchWithRetry(endpoint, {
-    ...options,
-    headers,
+// ========== GENERIC API REQUEST ==========
+
+export async function apiRequest<T = unknown>(
+  endpoint: string,
+  options: RequestInit & { method?: string } = {}
+): Promise<ApiResponse<T>> {
+  try {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      ...options.headers,
+    };
+
+    // Aggiungi token Bearer se disponibile
+    const token = localStorage.getItem("token");
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
+
+    const data = (await response.json()) as T;
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: getErrorMessage(data),
+        status: response.status,
+      };
+    }
+
+    return {
+      success: true,
+      data,
+      status: response.status,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: getErrorMessage(error),
+      status: 500,
+    };
+  }
+}
+
+// ========== AUTH API FUNCTIONS ==========
+
+export async function registerUser(payload: RegisterRequest): Promise<ApiResponse<AuthResponse>> {
+  return apiRequest<AuthResponse>("/auth/register", {
+    method: "POST",
+    body: JSON.stringify(payload),
   });
-
-  if (!result.ok) {
-    const errorInfo = getErrorMessage(result.error, result.status);
-    throw new Error(errorInfo.message || JSON.stringify(result.error));
-  }
-
-  return result.data;
 }
 
-/**
- * Effettua una richiesta GET
- */
-export async function apiGet(
-  endpoint: string,
-  token: string | null = null
-): Promise<unknown> {
-  return apiRequest(endpoint, { method: 'GET' }, token);
+export async function loginUser(payload: LoginRequest): Promise<ApiResponse<AuthResponse>> {
+  return apiRequest<AuthResponse>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 }
 
-/**
- * Effettua una richiesta POST
- */
-export async function apiPost(
-  endpoint: string,
-  data: Record<string, unknown> = {},
-  token: string | null = null
-): Promise<unknown> {
-  return apiRequest(
-    endpoint,
-    {
-      method: 'POST',
-      body: JSON.stringify(data),
-    },
-    token
-  );
+export async function getMe(): Promise<ApiResponse<UserResponse>> {
+  return apiRequest<UserResponse>("/auth/me", {
+    method: "GET",
+  });
 }
 
-/**
- * Effettua una richiesta PUT
- */
-export async function apiPut(
-  endpoint: string,
-  data: Record<string, unknown> = {},
-  token: string | null = null
-): Promise<unknown> {
-  return apiRequest(
-    endpoint,
-    {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    },
-    token
-  );
+export async function refreshToken(payload: RefreshTokenRequest): Promise<ApiResponse<AuthResponse>> {
+  return apiRequest<AuthResponse>("/auth/refresh", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 }
 
-/**
- * Effettua una richiesta DELETE
- */
-export async function apiDelete(
-  endpoint: string,
-  token: string | null = null
-): Promise<unknown> {
-  return apiRequest(endpoint, { method: 'DELETE' }, token);
+export async function logoutUser(): Promise<ApiResponse<void>> {
+  return apiRequest<void>("/auth/logout", {
+    method: "POST",
+  });
 }
 
-// ─────────────────────────────────────────────────────────────
-// Authentication API
-// ─────────────────────────────────────────────────────────────
+// ========== GAMEPLAY API FUNCTIONS ==========
 
-export const authAPI = {
-  /**
-   * Registra un nuovo utente
-   */
-  async register(
-    email: string,
-    password: string,
-    locale: string = 'it'
-  ): Promise<ApiResponse<AuthResponse>> {
-    try {
-      console.log('[AuthAPI] Registrazione:', email);
-      
-      const data = await apiPost('/auth/register', {
-        email,
-        password,
-        locale,
-      }) as AuthResponse;
+export interface CheckInPayload {
+  mood: number;
+  anxiety: number;
+  energy: number;
+  note: string;
+}
 
-      console.log('[AuthAPI] Registrazione riuscita:', email);
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      console.error('[AuthAPI] Errore registrazione:', message);
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
+export interface CheckInResponse extends CheckInPayload {
+  id: string;
+  userId: string;
+  timestamp: number;
+}
 
-  /**
-   * Login utente
-   */
-  async login(
-    email: string,
-    password: string
-  ): Promise<ApiResponse<AuthResponse>> {
-    try {
-      console.log('[AuthAPI] Login:', email);
-      
-      const data = await apiPost('/auth/login', {
-        email,
-        password,
-      }) as AuthResponse;
+export async function submitCheckIn(payload: CheckInPayload): Promise<ApiResponse<CheckInResponse>> {
+  return apiRequest<CheckInResponse>("/gameplay/checkin", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
 
-      console.log('[AuthAPI] Login riuscito:', email);
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      console.error('[AuthAPI] Errore login:', message);
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
+export async function getCheckIns(): Promise<ApiResponse<CheckInResponse[]>> {
+  return apiRequest<CheckInResponse[]>("/gameplay/checkins", {
+    method: "GET",
+  });
+}
 
-  /**
-   * Rinnova l'access token usando il refresh token
-   */
-  async refreshToken(
-    refreshToken: string
-  ): Promise<ApiResponse<AuthResponse>> {
-    try {
-      console.log('[AuthAPI] Refresh token...');
-      
-      const data = await apiPost('/auth/refresh', {
-        refresh_token: refreshToken,
-      }) as AuthResponse;
+export interface GameStateResponse {
+  seaState: number;
+  fishData: Array<{
+    dimension: string;
+    growth: number;
+  }>;
+  checkInCount: number;
+}
 
-      console.log('[AuthAPI] Token rinnovato');
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      console.error('[AuthAPI] Errore refresh token:', message);
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
+export async function getGameState(): Promise<ApiResponse<GameStateResponse>> {
+  return apiRequest<GameStateResponse>("/gameplay/state", {
+    method: "GET",
+  });
+}
 
-  /**
-   * Ottiene i dati dell'utente autenticato
-   */
-  async getMe(token: string): Promise<ApiResponse<UserResponse>> {
-    try {
-      console.log('[AuthAPI] Fetch user data');
-      
-      const data = await apiGet('/auth/me', token) as UserResponse;
+// ========== ERROR HANDLING ==========
 
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      console.error('[AuthAPI] Errore fetch user:', message);
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
+export function isApiError<T>(response: ApiResponse<T>): response is ApiResponse<T> & { success: false } {
+  return !response.success;
+}
 
-  /**
-   * Logout (backend side)
-   */
-  async logout(token: string): Promise<ApiResponse<unknown>> {
-    try {
-      console.log('[AuthAPI] Logout');
-      
-      const data = await apiPost('/auth/logout', {}, token);
-
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      console.error('[AuthAPI] Errore logout:', message);
-      // Logout fallisce ma comunque elimina il token
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
-
-  /**
-   * Richiesta di reset password
-   */
-  async forgotPassword(email: string): Promise<ApiResponse<unknown>> {
-    try {
-      console.log('[AuthAPI] Forgot password:', email);
-      
-      const data = await apiPost('/auth/forgot-password', {
-        email,
-      });
-
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      console.error('[AuthAPI] Errore forgot password:', message);
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
-
-  /**
-   * Reset password con token
-   */
-  async resetPassword(
-    token: string,
-    newPassword: string
-  ): Promise<ApiResponse<unknown>> {
-    try {
-      console.log('[AuthAPI] Reset password...');
-      
-      const data = await apiPost('/auth/reset-password', {
-        token,
-        new_password: newPassword,
-      });
-
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      console.error('[AuthAPI] Errore reset password:', message);
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
-
-  /**
-   * Health check
-   */
-  async healthCheck(): Promise<ApiResponse<unknown>> {
-    try {
-      const data = await apiGet('/auth/health');
-      return {
-        success: true,
-        data,
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Errore sconosciuto';
-      return {
-        success: false,
-        error: message,
-      };
-    }
-  },
-};
-
-// ─────────────────────────────────────────────────────────────
-// Game API
-// ─────────────────────────────────────────────────────────────
-
-export const gameAPI = {
-  /**
-   * Registra un evento (check-in, etc)
-   */
-  async createEvent(
-    eventType: string,
-    metadata: Record<string, unknown>,
-    token: string
-  ): Promise<unknown> {
-    return apiPost(
-      '/events',
-      {
-        event_type: eventType,
-        metadata,
-      },
-      token
-    );
-  },
-
-  /**
-   * Fetcha i pesci dell'utente
-   */
-  async getFish(userId: string, token: string): Promise<unknown> {
-    return apiGet(`/user/${userId}/fish`, token);
-  },
-
-  /**
-   * Fetcha lo stato del mare
-   */
-  async getSeaState(userId: string, token: string): Promise<unknown> {
-    return apiGet(`/user/${userId}/sea-state`, token);
-  },
-
-  /**
-   * Ricalcola lo stato (pesci e mare)
-   */
-  async computeState(userId: string, token: string): Promise<unknown> {
-    return apiPost(`/user/${userId}/compute-state`, {}, token);
-  },
-
-  /**
-   * Esporta i dati dell'utente
-   */
-  async exportData(userId: string, token: string): Promise<unknown> {
-    return apiGet(`/user/${userId}/export-data`, token);
-  },
-
-  /**
-   * Sincronizza con MongoDB
-   */
-  async syncToMongoDB(userId: string, token: string): Promise<unknown> {
-    return apiPost(`/user/${userId}/export-mongodb`, {}, token);
-  },
-
-  /**
-   * Fetcha analytics
-   */
-  async getAnalytics(userId: string, token: string): Promise<unknown> {
-    return apiGet(`/user/${userId}/analytics`, token);
-  },
-};
+export function getApiErrorMessage<T>(response: ApiResponse<T>): string {
+  return response.error ?? "An unknown error occurred";
+}
