@@ -210,7 +210,6 @@ for i, riga in enumerate(righe[1:], start=2):
 
         if inserite % 10 == 0:
             conn.commit()
-            print(f"Salvate {inserite} righe...")
 
     except Exception as e:
         print(f"Riga {i} saltata: {e}")

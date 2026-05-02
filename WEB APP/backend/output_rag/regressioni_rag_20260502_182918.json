@@ -1,0 +1,251 @@
+{
+  "metadata": {
+    "timestamp": "20260502_182918",
+    "source": "regression_analysis",
+    "total_records": 148,
+    "version": "1.0",
+    "language": "it"
+  },
+  "regression_parameters": {
+    "analysis_type": "Multiple regression analysis with polynomial and ensemble methods",
+    "test_split": 0.2,
+    "models_tested": [
+      "Linear",
+      "Polynomial (degree 2,3)",
+      "Ridge",
+      "Lasso",
+      "Random Forest",
+      "Gradient Boosting"
+    ]
+  },
+  "sections": {
+    "summary": {
+      "descrizione": "Statistiche generali dell'analisi di regressione",
+      "dati": [
+        {
+          "Metrica": "Totale record",
+          "Valore": 148
+        },
+        {
+          "Metrica": "Miglior modello semplice",
+          "Valore": "Resilienza → Evitamento"
+        },
+        {
+          "Metrica": "Miglior R² semplice",
+          "Valore": "0.6356"
+        },
+        {
+          "Metrica": "Miglior modello avanzato",
+          "Valore": "Linear Regression"
+        },
+        {
+          "Metrica": "Miglior R² avanzato",
+          "Valore": "1.0000"
+        }
+      ]
+    },
+    "simple_regressions": {
+      "descrizione": "Risultati delle regressioni lineari semplici su 4 coppie di variabili",
+      "dati": [
+        {
+          "Coppia": "Resilienza → Evitamento",
+          "R²": 0.6356152136192488,
+          "RMSE": 0.6140792034648146,
+          "MAE": 0.5158916145382941
+        },
+        {
+          "Coppia": "Ansia → Evitamento",
+          "R²": 0.625201298885446,
+          "RMSE": 0.6227924085993513,
+          "MAE": 0.49422233798412485
+        },
+        {
+          "Coppia": "Ansia → Coping",
+          "R²": 0.11013361860651472,
+          "RMSE": 0.7791972898256235,
+          "MAE": 0.6367529071563761
+        },
+        {
+          "Coppia": "Ansia → Gap",
+          "R²": 0.47651552875455494,
+          "RMSE": 0.9787929891368283,
+          "MAE": 0.8304500390533559
+        }
+      ]
+    },
+    "polynomial_models": {
+      "descrizione": "Confronto tra modelli lineari e polinomiali (grado 2 e 3)",
+      "dati": [
+        {
+          "Coppia": "Ansia → Coping",
+          "Modello": "Lineare",
+          "R²": 0.11013361860651472,
+          "RMSE": 0.7791972898256235
+        },
+        {
+          "Coppia": "Ansia → Coping",
+          "Modello": "Polinomiale (grado 2)",
+          "R²": 0.28042457977526447,
+          "RMSE": 0.6639455668698306
+        },
+        {
+          "Coppia": "Ansia → Coping",
+          "Modello": "Polinomiale (grado 3)",
+          "R²": 0.28363973182045477,
+          "RMSE": 0.6624606107835905
+        },
+        {
+          "Coppia": "Ansia → Gap",
+          "Modello": "Lineare",
+          "R²": 0.47651552875455494,
+          "RMSE": 0.9787929891368283
+        },
+        {
+          "Coppia": "Ansia → Gap",
+          "Modello": "Polinomiale (grado 2)",
+          "R²": 0.5651830571669905,
+          "RMSE": 1.0428772637933585
+        },
+        {
+          "Coppia": "Ansia → Gap",
+          "Modello": "Polinomiale (grado 3)",
+          "R²": 0.5745385811643817,
+          "RMSE": 1.03159698040452
+        }
+      ]
+    },
+    "advanced_models": {
+      "descrizione": "Performance dei modelli avanzati (Ridge, Lasso, ensemble) con R² train/test",
+      "dati": [
+        {
+          "Modello": "Linear Regression",
+          "R² Train": 1.0,
+          "R² Test": 1.0,
+          "RMSE": 2.094764613337708e-15,
+          "MAE": 1.887379141862766e-15
+        },
+        {
+          "Modello": "Ridge (α=1.0)",
+          "R² Train": 0.9769852435481106,
+          "R² Test": 0.9476031290571783,
+          "RMSE": 0.24779544615694463,
+          "MAE": 0.21593989978895983
+        },
+        {
+          "Modello": "Ridge (α=0.1)",
+          "R² Train": 0.9990938992138232,
+          "R² Test": 0.9981822139490291,
+          "RMSE": 0.04615428505005348,
+          "MAE": 0.04080920743849595
+        },
+        {
+          "Modello": "Ridge (α=10.0)",
+          "R² Train": 0.8465730161560249,
+          "R² Test": 0.6351445128787059,
+          "RMSE": 0.653884564713273,
+          "MAE": 0.5471733969732351
+        },
+        {
+          "Modello": "Lasso (α=0.01)",
+          "R² Train": 0.9950434489100645,
+          "R² Test": 0.9896348687217627,
+          "RMSE": 0.11021178801146635,
+          "MAE": 0.08925075456034126
+        },
+        {
+          "Modello": "Lasso (α=0.001)",
+          "R² Train": 0.9999495663605831,
+          "R² Test": 0.9998939150089564,
+          "RMSE": 0.0111498138495331,
+          "MAE": 0.00905038502214478
+        },
+        {
+          "Modello": "Random Forest",
+          "R² Train": 0.9646614884393063,
+          "R² Test": 0.5234446666666666,
+          "RMSE": 0.747304008586867,
+          "MAE": 0.6371875
+        },
+        {
+          "Modello": "Gradient Boosting",
+          "R² Train": 0.9999967323169938,
+          "R² Test": 0.6629732241575159,
+          "RMSE": 0.6284530634346618,
+          "MAE": 0.4918291169922737
+        }
+      ]
+    },
+    "cross_validation": {
+      "descrizione": "Risultati della cross-validation 5-fold per validare la generalizazione dei modelli",
+      "dati": [
+        {
+          "Target": "Ansia → Coping",
+          "Modello": "Lineare",
+          "CV_R²_Media": 0.20755946014678545,
+          "CV_R²_Std": 0.11781009158085505,
+          "KFold_R²_Media": 0.5000415819373912
+        },
+        {
+          "Target": "Ansia → Coping",
+          "Modello": "Polinomiale (grado 2)",
+          "CV_R²_Media": 0.24107250613692352,
+          "CV_R²_Std": 0.12515455403396689,
+          "KFold_R²_Media": 0.5259982402738068
+        },
+        {
+          "Target": "Ansia → Coping",
+          "Modello": "Polinomiale (grado 3)",
+          "CV_R²_Media": 0.20215495422484234,
+          "CV_R²_Std": 0.11060895333716395,
+          "KFold_R²_Media": 0.5317253418199966
+        },
+        {
+          "Target": "Ansia → Gap",
+          "Modello": "Lineare",
+          "CV_R²_Media": 0.44881049828091085,
+          "CV_R²_Std": 0.2258468852926161,
+          "KFold_R²_Media": NaN
+        },
+        {
+          "Target": "Ansia → Gap",
+          "Modello": "Polinomiale (grado 2)",
+          "CV_R²_Media": 0.4762413936374507,
+          "CV_R²_Std": 0.2234143181199057,
+          "KFold_R²_Media": NaN
+        },
+        {
+          "Target": "Ansia → Gap",
+          "Modello": "Polinomiale (grado 3)",
+          "CV_R²_Media": 0.4786441533943382,
+          "CV_R²_Std": 0.19481653019195916,
+          "KFold_R²_Media": NaN
+        }
+      ]
+    },
+    "conclusions": {
+      "descrizione": "Conclusioni e raccomandazioni",
+      "dati": [
+        {
+          "numero": 1,
+          "titolo": "Regressioni Semplici",
+          "contenuto": "Miglior coppia: Resilienza → Evitamento con R² = 0.6356"
+        },
+        {
+          "numero": 2,
+          "titolo": "Modelli Polinomiali",
+          "contenuto": "Il grado 2 offre miglioramento rispetto a lineare senza rischio di overfitting eccessivo"
+        },
+        {
+          "numero": 3,
+          "titolo": "Modelli Avanzati",
+          "contenuto": "Miglior modello: Linear Regression con R² test = 1.0000"
+        },
+        {
+          "numero": 4,
+          "titolo": "Cross-Validation",
+          "contenuto": "CV scores confermano generalizazione del modello polinomiale grado 2"
+        }
+      ]
+    }
+  }
+}
