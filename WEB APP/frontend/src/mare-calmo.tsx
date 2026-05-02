@@ -1,8 +1,88 @@
-import { useState, useEffect, useCallback, useMemo, useRef, useContext } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef, useContext, FC, ReactNode, CSSProperties } from "react";
 import { AuthContext } from "./auth-context";
-import { AnalyticsPage } from "./analytics-page";
+import { AnalyticsPage } from "./analytics-page.jsx";
 
-const themes = {
+// ========== TYPE DEFINITIONS ==========
+
+interface Theme {
+  name: string;
+  bgPrimary: string;
+  bgSecondary: string;
+  bgGradientTop: string;
+  bgGradientBottom: string;
+  seaDeep: string;
+  seaMid: string;
+  seaLight: string;
+  sand: string;
+  palm: string;
+  rock: string;
+  accentSoft: string;
+  accentGlow: string;
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  cardBg: string;
+  cardBorder: string;
+  cardShadow: string;
+  particleColor: string;
+}
+
+interface Bubble {
+  id: string;
+  cx: number;
+  delay: number;
+  dur: number;
+  r: number;
+}
+
+interface SeaInfo {
+  label: string;
+  light: number;
+  waveSpeed: number;
+  particles: boolean;
+}
+
+interface FishData {
+  dimension: string;
+  growth: number;
+}
+
+interface FishVisual extends FishData {
+  i: number;
+  color: string;
+  accent: string;
+  size: number;
+  variant: number;
+  stage: string;
+}
+
+interface CheckInData {
+  mood: number;
+  anxiety: number;
+  energy: number;
+  note: string;
+  timestamp: number;
+}
+
+interface CopingStrategy {
+  trigger: string;
+  title: string;
+  description: string;
+  source: string;
+}
+
+interface PageType {
+  onboarding: "onboarding";
+  sea: "sea";
+  island: "island";
+  support: "support";
+  progress: "progress";
+  analytics: "analytics";
+}
+
+// ========== THEME CONFIGURATIONS ==========
+
+const themes: Record<string, Theme> = {
   notte: {
     name: "notte", bgPrimary: "#1A2E3E", bgSecondary: "#2A3E52",
     bgGradientTop: "#3A5A7E", bgGradientBottom: "#1A2E3E",
@@ -162,14 +242,15 @@ function SwimmingFish({ startX, startY, color, accent, size, variant, duration, 
 function Bubbles({ count, theme }) {
   const bubbles = useMemo(() =>
     Array.from({ length: count }, (_, i) => ({
+      id: `bubble-${i}`,
       cx: 30 + Math.random() * 340,
       delay: Math.random() * 12,
       dur: 7 + Math.random() * 9,
       r: 1.2 + Math.random() * 2.5,
     })), [count]);
   return <>
-    {bubbles.map((b, i) => (
-      <circle key={i} cx={b.cx} r={b.r}
+    {bubbles.map((b) => (
+      <circle key={b.id} cx={b.cx} r={b.r}
         fill={theme.particleColor} stroke={theme.particleColor} strokeWidth="0.3"
         style={{ animation: `bubbleRise ${b.dur}s ease-in ${b.delay}s infinite` }} />
     ))}
@@ -386,7 +467,7 @@ function OnboardingPage({ theme, onComplete }) {
       </div>
       <div style={{ display: "flex", gap: 8, marginTop: 48 }}>
         {steps.map((_, i) => (
-          <div key={i} style={{ width: i === step ? 24 : 8, height: 8, borderRadius: 4, background: i === step ? theme.accentSoft : theme.textMuted, opacity: i === step ? 1 : 0.3, transition: "all 0.5s ease" }} />
+          <div key={`step-${i}`} style={{ width: i === step ? 24 : 8, height: 8, borderRadius: 4, background: i === step ? theme.accentSoft : theme.textMuted, opacity: i === step ? 1 : 0.3, transition: "all 0.5s ease" }} />
         ))}
       </div>
       <button onClick={() => (step < 2 ? setStep(step + 1) : onComplete())} style={{
@@ -598,7 +679,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
     { label: "Come ti senti oggi?", render: () => (
       <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 24 }}>
         {moodEmojis.map((e, i) => (
-          <button key={i} onClick={() => setMood(i + 1)} style={{
+          <button key={`mood-${i}`} onClick={() => setMood(i + 1)} style={{
             fontSize: 30, background: mood === i + 1 ? `${theme.accentSoft}33` : "transparent",
             border: mood === i + 1 ? `2px solid ${theme.accentSoft}` : "2px solid transparent",
             borderRadius: 16, padding: "10px 12px", cursor: "pointer",
@@ -620,7 +701,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
     { label: "Com'è la tua energia?", render: () => (
       <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 24 }}>
         {energyLabels.map((l, i) => (
-          <button key={i} onClick={() => setEnergy(i + 1)} style={{
+          <button key={`energy-${i}`} onClick={() => setEnergy(i + 1)} style={{
             padding: "12px 24px", borderRadius: 50,
             border: energy === i + 1 ? `2px solid ${theme.accentSoft}` : `1px solid ${theme.cardBorder}`,
             background: energy === i + 1 ? `${theme.accentSoft}22` : theme.cardBg,
@@ -676,7 +757,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
 
       <div style={{ display: "flex", gap: 6, marginTop: 28 }}>
         {questions.map((_, i) => (
-          <div key={i} style={{ width: 8, height: 8, borderRadius: 4, background: i <= step ? theme.accentSoft : theme.textMuted, opacity: i <= step ? 1 : 0.2, transition: "all 0.4s ease" }} />
+          <div key={`progress-${i}`} style={{ width: 8, height: 8, borderRadius: 4, background: i <= step ? theme.accentSoft : theme.textMuted, opacity: i <= step ? 1 : 0.2, transition: "all 0.4s ease" }} />
         ))}
       </div>
 
@@ -700,7 +781,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
               Cassetta degli strumenti
             </h3>
             {["Respirazione 4-4-4", "Grounding 5-4-3-2-1", "Scrittura libera", "Una cosa piccola oggi"].map((t, i) => (
-              <div key={i} style={{ padding: "12px 16px", borderRadius: 16, background: theme.bgSecondary, marginBottom: 8, cursor: "pointer", fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 14, color: theme.textSecondary, transition: "all 0.3s ease" }}>
+              <div key={`toolkit-${i}`} style={{ padding: "12px 16px", borderRadius: 16, background: theme.bgSecondary, marginBottom: 8, cursor: "pointer", fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 14, color: theme.textSecondary, transition: "all 0.3s ease" }}>
                 {["◆", "✋", "✎", "◈"][i]} {t}
               </div>
             ))}
@@ -732,7 +813,7 @@ function SupportPage({ theme, checkInData, onReturn }) {
       background: `linear-gradient(180deg, ${theme.bgGradientTop}, ${theme.bgPrimary})`, padding: 24, transition: "all 0.8s ease" }}>
       <div style={{ width: 80, height: 80, borderRadius: "50%", background: `radial-gradient(circle, ${theme.accentGlow}33, transparent)`, animation: "lanternPulse 3s ease-in-out infinite", marginBottom: 20 }} />
       {sections.map((s, i) => (
-        <div key={i} style={{ animation: `fadeSlideIn 0.7s ease ${i * 0.4}s both`, background: theme.cardBg, borderRadius: 24, padding: "22px 24px", maxWidth: 360, width: "100%", marginBottom: 14, border: `1px solid ${theme.cardBorder}`, boxShadow: theme.cardShadow }}>
+        <div key={`section-${i}`} style={{ animation: `fadeSlideIn 0.7s ease ${i * 0.4}s both`, background: theme.cardBg, borderRadius: 24, padding: "22px 24px", maxWidth: 360, width: "100%", marginBottom: 14, border: `1px solid ${theme.cardBorder}`, boxShadow: theme.cardShadow }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <span style={{ fontSize: 20 }}>{s.icon}</span>
             <span style={{ fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 14, fontWeight: 600, color: theme.accentSoft, letterSpacing: 0.5 }}>{s.title}</span>
@@ -781,12 +862,12 @@ function ProgressPage({ theme, checkIns, fishData, seaState, onBack }) {
         <svg viewBox="0 0 400 120" preserveAspectRatio="none" style={{ width: "100%", height: "100%" }}>
           <path d="M0,70 Q50,55 100,65 Q150,75 200,60 Q250,50 300,65 Q350,75 400,60 L400,120 L0,120 Z" fill={theme.seaLight} opacity="0.6" style={{ animation: "waveShift 15s ease-in-out infinite" }} />
           <path d="M0,80 Q50,70 100,78 Q150,86 200,75 Q250,68 300,78 Q350,86 400,72 L400,120 L0,120 Z" fill={theme.seaDeep} opacity="0.5" style={{ animation: "waveShift 20s ease-in-out 2s infinite" }} />
-          {fishData.map((f, i) => <circle key={i} cx={100 + i * 80} cy={85 + (i % 2) * 10} r={3 + f.growth * 4} fill={theme.accentSoft} opacity="0.7" />)}
+          {fishData.map((f, i) => <circle key={`fish-circle-${f.dimension}-${i}`} cx={100 + i * 80} cy={85 + (i % 2) * 10} r={3 + f.growth * 4} fill={theme.accentSoft} opacity="0.7" />)}
         </svg>
       </div>
 
       {narratives.map((n, i) => (
-        <p key={i} style={{ fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 15, color: theme.textPrimary, textAlign: "center", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 8px", animation: `fadeSlideIn 0.6s ease ${i * 0.2}s both` }}>{n}</p>
+        <p key={`narrative-${i}`} style={{ fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 15, color: theme.textPrimary, textAlign: "center", lineHeight: 1.7, maxWidth: 340, margin: "0 auto 8px", animation: `fadeSlideIn 0.6s ease ${i * 0.2}s both` }}>{n}</p>
       ))}
 
       <div style={{ maxWidth: 380, margin: "28px auto 0" }}>
@@ -794,7 +875,7 @@ function ProgressPage({ theme, checkIns, fishData, seaState, onBack }) {
           const stage = discretizeVisual(f.growth);
           const labels = { small: "Appena arrivato", medium: "Sta crescendo", grown: "Si fa vedere", large: "Nuota con sicurezza", adult: "Completamente a casa" };
           return (
-            <div key={i} style={{ background: theme.cardBg, borderRadius: 20, padding: "16px 20px", marginBottom: 10, border: `1px solid ${theme.cardBorder}`, display: "flex", alignItems: "center", gap: 14, animation: `fadeSlideIn 0.5s ease ${0.4 + i * 0.15}s both` }}>
+            <div key={`fish-progress-${f.dimension}`} style={{ background: theme.cardBg, borderRadius: 20, padding: "16px 20px", marginBottom: 10, border: `1px solid ${theme.cardBorder}`, display: "flex", alignItems: "center", gap: 14, animation: `fadeSlideIn 0.5s ease ${0.4 + i * 0.15}s both` }}>
               <div style={{ width: 40, height: 40, borderRadius: 12, background: `${theme.accentSoft}22`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg viewBox="-30 -18 60 36" width="34" height="26">
                   <FishBody color={theme.accentSoft} accent={theme.accentGlow} variant={i % 3} id={`prog-${i}`} />
@@ -827,7 +908,7 @@ function ProgressPage({ theme, checkIns, fishData, seaState, onBack }) {
                 const x = (i / Math.max(arr.length - 1, 1)) * 300 + 10;
                 const y = 70 - (c.anxiety / 5) * 60;
                 return (
-                  <g key={i}>
+                  <g key={`chart-${c.timestamp}`}>
                     {i > 0 && <line x1={((i - 1) / Math.max(arr.length - 1, 1)) * 300 + 10} y1={70 - (arr[i - 1].anxiety / 5) * 60} x2={x} y2={y} stroke={theme.accentSoft} strokeWidth="2" strokeLinecap="round" opacity="0.6" />}
                     <circle cx={x} cy={y} r="4" fill={theme.accentSoft} />
                   </g>

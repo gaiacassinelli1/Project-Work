@@ -8,7 +8,7 @@
  * - Gestione automatica del token Bearer
  */
 
-import { fetchWithRetry, getErrorMessage, API_CONFIG } from './api-config.jsx';
+import { fetchWithRetry, getErrorMessage, API_CONFIG } from './api-config.tsx';
 import type { 
   ApiResponse, 
   AuthResponse, 

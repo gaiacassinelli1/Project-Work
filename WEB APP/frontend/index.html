@@ -1,13 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Mare Calmo - App di supporto all'ansia da prestazione" />
-    <title>Mare Calmo</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mare Calmo - Gestione ansia e benessere psicologico attraverso visualizzazione interattiva." />
+    <meta name="theme-color" content="#1A2E3E" />
+    
+    <title>Mare Calmo - Il tuo spazio di calma</title>
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      html, body, #root {
+        width: 100%;
+        height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+      
+      body {
+        background: #1A2E3E;
+        color: #F5F7FF;
+      }
+      
+      #root {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      
+      /* Prevent layout shift */
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

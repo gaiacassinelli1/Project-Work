@@ -1,54 +1,35 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
     "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx",
     "useDefineForClassFields": true,
-
-    /* Module Resolution */
-    "module": "Node16",
-    "moduleResolution": "node16",
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Type Checking - STRICT MODE */
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
 
-    /* Source Maps and Declarations */
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-
-    /* Advanced Type Checking */
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "strictBindCallApply": true,
-    "strictNullChecks": true,
-    "alwaysStrict": true,
-    "exactOptionalPropertyTypes": true,
-
-    /* Module Path Mapping */
+    /* Path mapping */
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
-      "@api/*": ["./src/api/*"],
-      "@context/*": ["./src/context/*"],
       "@types/*": ["./src/types/*"],
       "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  //"references": [{ "path": "C:/Users/Utente/OneDrive - ITS Tech Talent Factory/Project Work/Project-Work/WEB APP/frontend/tsconfig.node.json" }]
 }
