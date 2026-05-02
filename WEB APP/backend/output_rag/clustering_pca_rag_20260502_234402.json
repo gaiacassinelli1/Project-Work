@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "timestamp": "20260502_234402",
+    "analysis_type": "PCA-based clustering",
+    "total_records": 148,
+    "records_analyzed": 38,
+    "original_features": 29,
+    "pca_components": 
