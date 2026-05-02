@@ -1,41 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Mare Calmo - Gestione ansia e benessere psicologico attraverso visualizzazione interattiva." />
     <meta name="theme-color" content="#1A2E3E" />
+    <meta name="description" content="Mare Calmo - Supporto per l'ansia e il benessere mentale" />
+    <meta name="keywords" content="ansia, salute mentale, benessere, mindfulness" />
+    <meta name="author" content="Gaia Cassinelli" />
     
-    <title>Mare Calmo - Il tuo spazio di calma</title>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mare Calmo" />
+    <meta property="og:description" content="Supporto personalizzato per l'ansia e il benessere emotivo" />
+    <meta property="og:image" content="/og-image.png" />
     
+    <!-- Preconnect per performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Century+Gothic&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Global styles -->
     <style>
       * {
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
-        box-sizing: border-box;
       }
       
-      html, body, #root {
+      html, body {
         width: 100%;
         height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-          'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif;
         overflow-x: hidden;
       }
       
-      body {
-        background: #1A2E3E;
-        color: #F5F7FF;
-      }
-      
       #root {
-        display: flex;
-        flex-direction: column;
-        position: relative;
+        width: 100%;
+        min-height: 100vh;
       }
       
       /* Prevent layout shift */
@@ -43,9 +50,16 @@
         scroll-behavior: smooth;
       }
     </style>
+
+    <title>Mare Calmo</title>
   </head>
   <body>
+    <!-- Skip to content link per accessibilità -->
+    <a href="#main-content" class="sr-only">Salta al contenuto principale</a>
+    
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- App entry point -->
+    <script type="module" src="/src/index.jsx"></script>
   </body>
 </html>
