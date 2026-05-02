@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useAuth } from "./context/auth-context";
-import type { Theme, CheckInData, FishData, Bubble, SeaInfo } from "../types";
+import type { Theme, CheckInData, FishData, Bubble, SeaInfo } from "./types";
 import { AnalyticsPage } from "./analytics-page";
 
 const themes: Record<string, Theme> = {
@@ -586,7 +586,7 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
   );
 }
 
-function IslandPage({ theme, onSubmit, onBack, dayCount })  { {
+function IslandPage({ theme, onSubmit, onBack, dayCount }) {
   const [step, setStep] = useState(0);
   const [mood, setMood] = useState(3);
   const [anxiety, setAnxiety] = useState(3);
@@ -714,7 +714,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount })  { {
       )}
     </div>
   );
-}}
+}
 
 function SupportPage({ theme, checkInData, onReturn }) {
   const level = checkInData.anxiety >= 4 ? "high" : checkInData.anxiety >= 2 ? "medium" : "low";
@@ -857,7 +857,7 @@ const ProgressPage: React.FC<{ theme: Theme; checkIns: CheckInData[]; fishData: 
 }
 
 // MAIN APP
-const App: React.FC = () {
+const App: React.FC = () => {
   const { user, logout } = useAuth();
   const [themeName, setThemeName] = useState("notte");
   const [musicEnabled, setMusicEnabled] = useState(false);

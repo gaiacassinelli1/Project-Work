@@ -51,7 +51,6 @@ export default defineConfig({
         // Splitting dei chunk per migliore caching
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'styled-vendor': ['styled-components'],
         },
         
         // Naming pattern per file generati
@@ -97,8 +96,6 @@ export default defineConfig({
     include: [
       'react',
       'react-dom',
-      'styled-components',
-      'react-error-boundary',
     ],
     exclude: [],
   },
@@ -135,8 +132,4 @@ export default defineConfig({
     __API_URL__: JSON.stringify(process.env.REACT_APP_API_URL || 'http://localhost:3001/api'),
   },
 
-  // Legacy support
-  legacy: {
-    buildRollupPluginCommonjs: true,
-  },
 });
