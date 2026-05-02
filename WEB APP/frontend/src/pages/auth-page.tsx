@@ -100,7 +100,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ theme, onAuthSuccess }) => {
             marginBottom: "8px",
           }}
         >
-          Mare Calmo
+        Isola di Calma
         </h1>
 
         <p
