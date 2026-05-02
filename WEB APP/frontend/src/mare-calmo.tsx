@@ -1,14 +1,7 @@
-import { useState, useEffect, useCallback, useMemo, useRef, FC, ReactNode, CSSProperties } from "react";
-import { useAuth } from "./auth-context";
-import type { Theme, CheckInData, FishData } from "./types";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useAuth } from "./context/auth-context";
+import type { Theme, CheckInData, FishData, Bubble, SeaInfo } from "../types";
 import { AnalyticsPage } from "./analytics-page";
-
-interface SeaInfo {
-  label: string;
-  light: number;
-  waveSpeed: number;
-  particles: boolean;
-}
 
 const themes: Record<string, Theme> = {
   notte: {
@@ -33,7 +26,7 @@ const themes: Record<string, Theme> = {
   },
 };
 
-const EVENT_WEIGHTS: Record<string, number> = { check_in: 0.02, micro_action: 0.05, reflection: 0.01 };
+const EVENT_WEIGHTS = { check_in: 0.02, micro_action: 0.05, reflection: 0.01 };
 const EMA_ALPHA = 0.3;
 function ema(prev: number, curr: number, alpha: number = EMA_ALPHA): number { return alpha * curr + (1 - alpha) * prev; }
 function discretizeVisual(g: number): string {
@@ -70,9 +63,7 @@ const reflectionPrompts: string[] = [
 ];
 
 // IMPROVED FISH SVG — 3 variants with gradients
-interface FishBodyProps { color: string; accent: string; variant: number; id: string; }
-
-const FishBody: FC<FishBodyProps> = ({ color, accent, variant, id }) {
+const FishBody: React.FC<{ color: string; accent: string; variant: number; id: string }> = ({ color, accent, variant, id }) => {
   if (variant === 1) {
     return (
       <g>
@@ -140,7 +131,7 @@ const FishBody: FC<FishBodyProps> = ({ color, accent, variant, id }) {
 
 // Animated fish wrapper: positions using SVG x/y attributes (not CSS transform)
 // so the swim animation doesn't conflict with positioning
-function SwimmingFish({ startX, startY, color, accent, size, variant, duration, distance, flipX, delay, id }) {
+const SwimmingFish: React.FC<{ startX: number; startY: number; color: string; accent: string; size: number; variant: number; duration: number; distance: number; flipX: boolean; delay: number; id: string }> = ({ startX, startY, color, accent, size, variant, duration, distance, flipX, delay, id }) => {
   const animId = `swim-${id}`;
   const d = distance || 50;
   const dur = duration || 16;
@@ -169,9 +160,7 @@ function SwimmingFish({ startX, startY, color, accent, size, variant, duration, 
   );
 }
 
-interface BubblesProps { count: number; theme: Theme; }
-
-const Bubbles: FC<BubblesProps> = ({ count, theme }) {
+const Bubbles: React.FC<{ count: number; theme: Theme }> = ({ count, theme }) => {
   const bubbles = useMemo(() =>
     Array.from({ length: count }, (_, i) => ({
       id: `bubble-${i}`,
@@ -189,9 +178,7 @@ const Bubbles: FC<BubblesProps> = ({ count, theme }) {
   </>;
 }
 
-interface SeaweedProps { x: number; color: string; h?: number; }
-
-const Seaweed: FC<SeaweedProps> = ({ x, color, h }) {
+const Seaweed: React.FC<{ x: number; color: string; h?: number }> = ({ x, color, h }) => {
   const height = h || 150;
   return (
     <g>
@@ -208,9 +195,7 @@ const Seaweed: FC<SeaweedProps> = ({ x, color, h }) {
 }
 
 // ISLAND SVG
-interface IslandSVGProps { theme: Theme; lanternGlow: number; dayCount: number; }
-
-const IslandSVG: FC<IslandSVGProps> = ({ theme, lanternGlow, dayCount }) {
+const IslandSVG: React.FC<{ theme: Theme; lanternGlow: number; dayCount: number }> = ({ theme, lanternGlow, dayCount }) => {
   const hasPlant = dayCount >= 3;
   const hasBench = dayCount >= 7;
   return (
@@ -380,13 +365,8 @@ const IslandSVG: FC<IslandSVGProps> = ({ theme, lanternGlow, dayCount }) {
 
 // PAGES
 
-interface OnboardingPageProps { theme: Theme; onComplete: () => void; }
-
-const OnboardingPage: FC<OnboardingPageProps> = ({
-  theme,
-  onComplete,
-}): JSX.Element => { theme, onComplete }) {
-  const [step, setStep] = useState<number>(0);
+const OnboardingPage: React.FC<{ theme: Theme; onComplete: () => void }> = ({ theme, onComplete }) => {
+  const [step, setStep] = useState(0);
   const steps = [
     { text: "Il mare rappresenta il tuo stato interiore.", sub: "Ogni onda, ogni riflesso racconta qualcosa di te." },
     { text: "Sull'isola puoi fermarti ad ascoltarti.", sub: "Pochi minuti, senza giudizio, senza fretta." },
@@ -423,11 +403,9 @@ const OnboardingPage: FC<OnboardingPageProps> = ({
   );
 }
 
-interface SeaPageProps { theme: Theme; checkIns: CheckInData[]; fishData: FishData[]; seaState: number; setSeaState: (value: number) => void; setCheckIns: (checkIns: CheckInData[]) => void; setFishData: (fish: FishData[]) => void; setPage: (page: string) => void; onOpenAnalytics: () => void; }
-
-const SeaPage: FC<SeaPageProps> = ({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics }) {
+function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics }) { 
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef(null);
   const [resetToken] = useState(() => Math.random());
   
   const musicURL = theme.name === "notte" 
@@ -608,13 +586,11 @@ const SeaPage: FC<SeaPageProps> = ({ theme, fishData, seaState, onGoToIsland, on
   );
 }
 
-interface IslandPageProps { theme: Theme; seaState: number; setSeaState: (value: number) => void; checkIns: CheckInData[]; setCheckIns: (checkIns: CheckInData[]) => void; fishData: FishData[]; setFishData: (fish: FishData[]) => void; onBack: () => void; onNext: () => void; }
-
-const IslandPage: FC<IslandPageProps> = ({ theme, onSubmit, onBack, dayCount }) {
-  const [step, setStep] = useState<number>(0);
-  const [mood, setMood] = useState<number>(3);
+function IslandPage({ theme, onSubmit, onBack, dayCount })  { {
+  const [step, setStep] = useState(0);
+  const [mood, setMood] = useState(3);
   const [anxiety, setAnxiety] = useState(3);
-  const [energy, setEnergy] = useState<number>(2);
+  const [energy, setEnergy] = useState(2);
   const [note, setNote] = useState("");
   const [showToolkit, setShowToolkit] = useState(false);
   const moodEmojis = ["😌", "🙂", "😐", "😟", "😣"];
@@ -738,11 +714,9 @@ const IslandPage: FC<IslandPageProps> = ({ theme, onSubmit, onBack, dayCount }) 
       )}
     </div>
   );
-}
+}}
 
-interface SupportPageProps { theme: Theme; checkIns: CheckInData[]; onBack: () => void; }
-
-const SupportPage: FC<SupportPageProps> = ({ theme, checkInData, onReturn }) {
+function SupportPage({ theme, checkInData, onReturn }) {
   const level = checkInData.anxiety >= 4 ? "high" : checkInData.anxiety >= 2 ? "medium" : "low";
   const empathy = empatheticMessages[level][Math.floor(Math.random() * empatheticMessages[level].length)];
   const trigger = checkInData.anxiety >= 4 ? "high_anxiety" : checkInData.energy <= 1 ? "low_energy" : "neutral";
@@ -779,9 +753,7 @@ const SupportPage: FC<SupportPageProps> = ({ theme, checkInData, onReturn }) {
   );
 }
 
-interface ProgressPageProps { theme: Theme; checkIns: CheckInData[]; fishData: FishData[]; seaState: number; onBack: () => void; }
-
-const ProgressPage: FC<ProgressPageProps> = ({ theme, checkIns, fishData, seaState, onBack }) {
+const ProgressPage: React.FC<{ theme: Theme; checkIns: CheckInData[]; fishData: FishData[]; seaState: number; onBack: () => void }> = ({ theme, checkIns, fishData, seaState, onBack }) {
   const seaInfo = discretizeSea(seaState);
   const [showDetail, setShowDetail] = useState(false);
   const avgAnxiety = checkIns.length > 0 ? (checkIns.reduce((a, c) => a + c.anxiety, 0) / checkIns.length).toFixed(1) : "—";
@@ -885,19 +857,19 @@ const ProgressPage: FC<ProgressPageProps> = ({ theme, checkIns, fishData, seaSta
 }
 
 // MAIN APP
-const App: FC = (): JSX.Element => {
-  const { user, logout, login } = useAuth();
-  const [themeName, setThemeName] = useState<string>("notte");
-  const [musicEnabled, setMusicEnabled] = useState<boolean>(false);
-  const [page, setPage] = useState<string>("onboarding");
-  const [checkIns, setCheckIns] = useState<CheckInData[]>([]);
+const App: React.FC = () {
+  const { user, logout } = useAuth();
+  const [themeName, setThemeName] = useState("notte");
+  const [musicEnabled, setMusicEnabled] = useState(false);
+  const [page, setPage] = useState("onboarding");
+  const [checkIns, setCheckIns] = useState([]);
   const [lastCheckIn, setLastCheckIn] = useState(null);
   const [fishData, setFishData] = useState([
     { dimension: "studio", growth: 0.05 },
     { dimension: "lavoro", growth: 0.02 },
     { dimension: "benessere", growth: 0.03 },
   ]);
-  const [seaState, setSeaState] = useState<number>(0.15);
+  const [seaState, setSeaState] = useState(0.15);
   const [seaKey, setSeaKey] = useState(0);
   const theme = themes[themeName];
 
