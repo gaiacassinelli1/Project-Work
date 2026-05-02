@@ -316,30 +316,7 @@
 
 ---
 
-## 6. NEXT STEPS
-
-- [ ] **Completare Sentiment Analysis** (`analisi_sentiment.ipynb`)
-  - Analizzare risposte testuali aperte
-  - Identificare temi ricorrenti
-  - Correlazione sentiment ↔ costrutti psicometrici
-
-- [ ] **Validazione esterna** (se disponibile)
-  - Testare modelli su sample indipendente
-  - Valutare stabilità profili cluster
-
-- [ ] **Dashboard Web** (frontend già disponibile)
-  - Visualizzare profili cluster interattivamente
-  - Esplorare predizioni model
-  - Download report personalizzati
-
-- [ ] **Report finale** in Word/PDF
-  - Integrazione testo + figure + tabelle
-  - Formattazione accademica (APA style?)
-  - Appendici con dettagli statistici
-
----
-
-## 7. ALLEGATI E EXPORT
+## 6. ALLEGATI E EXPORT
 
 ### File Generati (in `../output/`)
 
