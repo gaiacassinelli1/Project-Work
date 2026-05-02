@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./mare-calmo";
 import { AuthProvider } from "./context/auth-context";
-import "./index.css";
+import "../index.css";
 
 // Verifica che root element esista
 const rootElement = document.getElementById("root");

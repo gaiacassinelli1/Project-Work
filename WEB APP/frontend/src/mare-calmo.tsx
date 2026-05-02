@@ -403,9 +403,12 @@ const OnboardingPage: React.FC<{ theme: Theme; onComplete: () => void }> = ({ th
   );
 }
 
-function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics }) { 
+function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics }: {
+  theme: Theme; fishData: FishData[]; seaState: number;
+  onGoToIsland: () => void; onGoToProgress: () => void; onGoToAnalytics: () => void;
+}) {
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
-  const audioRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [resetToken] = useState(() => Math.random());
   
   const musicURL = theme.name === "notte" 
@@ -586,7 +589,10 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
   );
 }
 
-function IslandPage({ theme, onSubmit, onBack, dayCount }) {
+function IslandPage({ theme, onSubmit, onBack, dayCount }: {
+  theme: Theme; onSubmit: (data: Omit<CheckInData, "timestamp">) => void;
+  onBack: () => void; dayCount: number;
+}) {
   const [step, setStep] = useState(0);
   const [mood, setMood] = useState(3);
   const [anxiety, setAnxiety] = useState(3);
@@ -666,7 +672,7 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
       </div>
 
       <div style={{ marginTop: 0, width: "100%", maxWidth: "50vw", zIndex: 5, margin: "0 auto" }}>
-        <IslandSVG theme={theme} lanternGlow={step > 0} dayCount={dayCount} />
+        <IslandSVG theme={theme} lanternGlow={step > 0 ? 1 : 0} dayCount={dayCount} />
       </div>
 
       <div key={step} style={{ animation: "fadeSlideIn 0.6s ease", textAlign: "center", padding: "20px 24px", marginTop: -220, zIndex: 15, position: "relative", background: `${theme.cardBg}dd`, borderRadius: 24, maxWidth: 380, margin: "-220px auto 0", backdropFilter: "blur(8px)" }}>
@@ -716,18 +722,22 @@ function IslandPage({ theme, onSubmit, onBack, dayCount }) {
   );
 }
 
-function SupportPage({ theme, checkInData, onReturn }) {
-  const level = checkInData.anxiety >= 4 ? "high" : checkInData.anxiety >= 2 ? "medium" : "low";
-  const empathy = empatheticMessages[level][Math.floor(Math.random() * empatheticMessages[level].length)];
-  const trigger = checkInData.anxiety >= 4 ? "high_anxiety" : checkInData.energy <= 1 ? "low_energy" : "neutral";
-  const strategies = copingStrategies.filter((s) => s.trigger === trigger);
-  const strategy = strategies[Math.floor(Math.random() * strategies.length)] || copingStrategies[4];
-  const reflection = reflectionPrompts[Math.floor(Math.random() * reflectionPrompts.length)];
-  const sections = [
-    { icon: "▶", title: "Ti ascolto", content: empathy },
-    { icon: "◈", title: strategy.title, content: strategy.description, source: strategy.source },
-    { icon: "○", title: "Uno spunto", content: reflection },
-  ];
+function SupportPage({ theme, checkInData, onReturn }: {
+  theme: Theme; checkInData: CheckInData; onReturn: () => void;
+}) {
+  const sections = useMemo(() => {
+    const level = checkInData.anxiety >= 4 ? "high" : checkInData.anxiety >= 2 ? "medium" : "low";
+    const empathy = empatheticMessages[level][Math.floor(Math.random() * empatheticMessages[level].length)];
+    const trigger = checkInData.anxiety >= 4 ? "high_anxiety" : checkInData.energy <= 1 ? "low_energy" : "neutral";
+    const strategies = copingStrategies.filter((s) => s.trigger === trigger);
+    const strategy = strategies[Math.floor(Math.random() * strategies.length)] || copingStrategies[4];
+    const reflection = reflectionPrompts[Math.floor(Math.random() * reflectionPrompts.length)];
+    return [
+      { icon: "▶", title: "Ti ascolto", content: empathy, source: undefined },
+      { icon: "◈", title: strategy.title, content: strategy.description, source: strategy.source },
+      { icon: "○", title: "Uno spunto", content: reflection, source: undefined },
+    ];
+  }, [checkInData]);
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -753,11 +763,11 @@ function SupportPage({ theme, checkInData, onReturn }) {
   );
 }
 
-const ProgressPage: React.FC<{ theme: Theme; checkIns: CheckInData[]; fishData: FishData[]; seaState: number; onBack: () => void }> = ({ theme, checkIns, fishData, seaState, onBack }) {
+const ProgressPage: React.FC<{ theme: Theme; checkIns: CheckInData[]; fishData: FishData[]; seaState: number; onBack: () => void }> = ({ theme, checkIns, fishData, seaState, onBack }) => {
   const seaInfo = discretizeSea(seaState);
   const [showDetail, setShowDetail] = useState(false);
   const avgAnxiety = checkIns.length > 0 ? (checkIns.reduce((a, c) => a + c.anxiety, 0) / checkIns.length).toFixed(1) : "—";
-  const narratives = [];
+  const narratives: string[] = [];
   if (checkIns.length === 0) narratives.push("Il tuo mare è appena nato. Fai il primo check-in per iniziare il percorso.");
   else if (checkIns.length < 3) narratives.push("Stai muovendo i primi passi. Continua a tornare, senza fretta.");
   else {
@@ -860,11 +870,10 @@ const ProgressPage: React.FC<{ theme: Theme; checkIns: CheckInData[]; fishData: 
 const App: React.FC = () => {
   const { user, logout } = useAuth();
   const [themeName, setThemeName] = useState("notte");
-  const [musicEnabled, setMusicEnabled] = useState(false);
   const [page, setPage] = useState("onboarding");
-  const [checkIns, setCheckIns] = useState([]);
-  const [lastCheckIn, setLastCheckIn] = useState(null);
-  const [fishData, setFishData] = useState([
+  const [checkIns, setCheckIns] = useState<CheckInData[]>([]);
+  const [lastCheckIn, setLastCheckIn] = useState<CheckInData | null>(null);
+  const [fishData, setFishData] = useState<FishData[]>([
     { dimension: "studio", growth: 0.05 },
     { dimension: "lavoro", growth: 0.02 },
     { dimension: "benessere", growth: 0.03 },
@@ -873,7 +882,12 @@ const App: React.FC = () => {
   const [seaKey, setSeaKey] = useState(0);
   const theme = themes[themeName];
 
-  const handleCheckIn = useCallback((data) => {
+  const goBackToSea = useCallback(() => {
+    setSeaKey(k => k + 1);
+    setPage("sea");
+  }, []);
+
+  const handleCheckIn = useCallback((data: Omit<CheckInData, "timestamp">) => {
     const newCheckIn = { ...data, timestamp: Date.now() };
     const newCheckIns = [...checkIns, newCheckIn];
     setCheckIns(newCheckIns);
@@ -926,7 +940,7 @@ const App: React.FC = () => {
               fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif",
               maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
             }}>
-              {user?.email}
+              {user.email}
             </div>
           )}
 
@@ -938,17 +952,6 @@ const App: React.FC = () => {
             transition: "all 0.4s ease",
           }} title="Logout">
             ⊗
-          </button>
-
-          {/* Button musica */}
-          <button onClick={() => setMusicEnabled(!musicEnabled)} style={{
-            width: 40, height: 40, borderRadius: "50%",
-            border: `1px solid ${theme.cardBorder}`, background: `${theme.cardBg}cc`, backdropFilter: "blur(10px)",
-            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16,
-            transition: "all 0.4s ease",
-            opacity: musicEnabled ? 1 : 0.6,
-          }} title={musicEnabled ? "Disattiva musica" : "Attiva musica"}>
-            {musicEnabled ? "♫" : "♪"}
           </button>
 
           {/* Button tema */}
@@ -963,11 +966,11 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {page === "onboarding" && <OnboardingPage theme={theme} onComplete={() => { setSeaKey(k => k + 1); setPage("sea"); }} />}
+      {page === "onboarding" && <OnboardingPage theme={theme} onComplete={goBackToSea} />}
       {page === "sea" && <SeaPage key={seaKey} theme={theme} fishData={fishData} seaState={seaState} onGoToIsland={() => setPage("island")} onGoToProgress={() => setPage("progress")} onGoToAnalytics={() => setPage("analytics")} />}
-      {page === "island" && <IslandPage theme={theme} onSubmit={handleCheckIn} onBack={() => { setSeaKey(k => k + 1); setPage("sea"); }} dayCount={checkIns.length} />}
-      {page === "support" && lastCheckIn && <SupportPage theme={theme} checkInData={lastCheckIn} onReturn={() => { setSeaKey(k => k + 1); setPage("sea"); }} />}
-      {page === "progress" && <ProgressPage theme={theme} checkIns={checkIns} fishData={fishData} seaState={seaState} onBack={() => { setSeaKey(k => k + 1); setPage("sea"); }} />}
+      {page === "island" && <IslandPage theme={theme} onSubmit={handleCheckIn} onBack={goBackToSea} dayCount={checkIns.length} />}
+      {page === "support" && lastCheckIn && <SupportPage theme={theme} checkInData={lastCheckIn} onReturn={goBackToSea} />}
+      {page === "progress" && <ProgressPage theme={theme} checkIns={checkIns} fishData={fishData} seaState={seaState} onBack={goBackToSea} />}
       {page === "analytics" && <AnalyticsPage theme={theme} onBack={() => { setSeaKey(k => k + 1); setPage("sea"); }} />}
     </div>
   );
