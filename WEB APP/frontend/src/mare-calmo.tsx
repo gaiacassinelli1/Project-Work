@@ -420,7 +420,7 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
     if (audioRef.current) {
       audioRef.current.src = musicURL;
       if (isPlayingMusic) {
-        audioRef.current.play().catch(() => console.log("Riproduzione bloccata"));
+        audioRef.current.play().catch(() => console.warn("Riproduzione bloccata"));
       } else {
         audioRef.current.pause();
       }

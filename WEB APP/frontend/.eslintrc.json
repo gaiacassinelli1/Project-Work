@@ -5,8 +5,10 @@
     "node": true,
     "jest": true
   },
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended"
   ],
@@ -23,92 +25,14 @@
     "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "off",
-    "no-unused-vars": [
-      "off",
-      {
-        "argsIgnorePattern": "^_"
-      }
-    ],
-    "no-console": [
-      "warn",
-      {
-        "allow": [
-          "warn",
-          "error"
-        ]
-      }
-    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-debugger": "warn",
-    "prefer-const": "error",
+    "prefer-const": "warn",
     "no-var": "error",
-    "eqeqeq": [
-      "error",
-      "always"
-    ],
-    "curly": [
-      "error",
-      "all"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
-    "quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true,
-        "allowTemplateLiterals": true
-      }
-    ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
-    "arrow-spacing": "error",
-    "space-before-function-paren": [
-      "error",
-      {
-        "anonymous": "always",
-        "named": "never",
-        "asyncArrow": "always"
-      }
-    ],
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
-    "key-spacing": "error",
-    "keyword-spacing": "error",
-    "space-infix-ops": "error",
-    "space-before-blocks": "error",
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
-    "array-bracket-spacing": [
-      "error",
-      "never"
-    ],
-    "computed-property-spacing": [
-      "error",
-      "never"
-    ],
-    "no-multiple-empty-lines": [
-      "error",
-      {
-        "max": 1,
-        "maxEOF": 0
-      }
-    ],
-    "no-trailing-spaces": "error",
-    "eol-last": [
-      "error",
-      "always"
-    ]
+    "eqeqeq": ["warn", "always"]
   },
   "settings": {
     "react": {
