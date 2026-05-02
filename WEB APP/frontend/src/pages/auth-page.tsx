@@ -1,4 +1,4 @@
-import { useState, FC, FormEvent } from "react";
+import React, { useState } from "react";
 import type { Theme } from "../types";
 
 // ========== INTERFACES ==========
@@ -6,11 +6,6 @@ import type { Theme } from "../types";
 interface AuthPageProps {
   theme: Theme;
   onAuthSuccess: () => void;
-}
-
-interface AuthFormData {
-  email: string;
-  password: string;
 }
 
 interface AuthResponse {
@@ -70,14 +65,14 @@ const themes: Record<string, Theme> = {
 
 // ========== AUTH PAGE COMPONENT ==========
 
-const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
+const AuthPage: React.FC<AuthPageProps> = ({ theme, onAuthSuccess }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [mode, setMode] = useState<"login" | "register">("login");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -96,7 +91,7 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
         return;
       }
 
-      // Simula una richiesta auth (sostituire con vera API)
+      // Simula una richiesta auth
       const response = await authenticateUser({
         email,
         password,
@@ -104,7 +99,6 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
       });
 
       if (response.success) {
-        // Salva il token
         if (response.token) {
           localStorage.setItem("token", response.token);
           localStorage.setItem("user", JSON.stringify({ email }));
@@ -170,8 +164,8 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
             fontWeight: 600,
             color: theme.textPrimary,
             textAlign: "center",
-            marginBottom: "8px",
             margin: 0,
+            marginBottom: "8px",
           }}
         >
           Mare Calmo
@@ -182,8 +176,8 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
             fontSize: "14px",
             color: theme.textSecondary,
             textAlign: "center",
+            margin: 0,
             marginBottom: "28px",
-            margin: "0 0 28px",
           }}
         >
           {mode === "login"
@@ -226,14 +220,6 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
                 transition: "all 0.3s ease",
                 outline: "none",
               }}
-              onFocus={(e): void => {
-                e.currentTarget.style.borderColor = theme.accentSoft;
-                e.currentTarget.style.boxShadow = `0 0 0 2px ${theme.accentSoft}22`;
-              }}
-              onBlur={(e): void => {
-                e.currentTarget.style.borderColor = theme.cardBorder;
-                e.currentTarget.style.boxShadow = "none";
-              }}
               disabled={loading}
             />
           </div>
@@ -270,14 +256,6 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
                 boxSizing: "border-box",
                 transition: "all 0.3s ease",
                 outline: "none",
-              }}
-              onFocus={(e): void => {
-                e.currentTarget.style.borderColor = theme.accentSoft;
-                e.currentTarget.style.boxShadow = `0 0 0 2px ${theme.accentSoft}22`;
-              }}
-              onBlur={(e): void => {
-                e.currentTarget.style.borderColor = theme.cardBorder;
-                e.currentTarget.style.boxShadow = "none";
               }}
               disabled={loading}
             />
@@ -318,18 +296,6 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
               transition: "all 0.3s ease",
               opacity: loading ? 0.7 : 1,
             }}
-            onMouseEnter={(e): void => {
-              if (!loading) {
-                e.currentTarget.style.background = theme.accentGlow;
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = `0 8px 16px ${theme.accentSoft}33`;
-              }
-            }}
-            onMouseLeave={(e): void => {
-              e.currentTarget.style.background = theme.accentSoft;
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
           >
             {loading ? "Caricamento..." : mode === "login" ? "Accedi" : "Registrati"}
           </button>
@@ -364,12 +330,6 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
               textDecoration: "underline",
               padding: 0,
             }}
-            onMouseEnter={(e): void => {
-              e.currentTarget.style.color = theme.accentGlow;
-            }}
-            onMouseLeave={(e): void => {
-              e.currentTarget.style.color = theme.accentSoft;
-            }}
             disabled={loading}
           >
             {mode === "login" ? "Registrati" : "Accedi"}
@@ -382,13 +342,12 @@ const AuthPage: FC<AuthPageProps> = ({ theme, onAuthSuccess }): JSX.Element => {
 
 // ========== AUTH HELPER FUNCTION ==========
 
-async function authenticateUser(
-  data: { email: string; password: string; mode: "login" | "register" }
-): Promise<AuthResponse> {
+async function authenticateUser(data: {
+  email: string;
+  password: string;
+  mode: "login" | "register";
+}): Promise<AuthResponse> {
   try {
-    // Simulazione di autenticazione locale
-    // In produzione, chiamare il vero endpoint API
-
     // Validazione
     if (!data.email.includes("@")) {
       return {
