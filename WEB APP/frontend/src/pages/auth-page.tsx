@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { Theme } from "../types";
+import { useAuth } from "../context/auth-context";
 
 // ========== INTERFACES ==========
 
@@ -8,64 +9,10 @@ interface AuthPageProps {
   onAuthSuccess: () => void;
 }
 
-interface AuthResponse {
-  success: boolean;
-  error?: string;
-  token?: string;
-}
-
-// ========== THEMES ==========
-
-const themes: Record<string, Theme> = {
-  notte: {
-    name: "notte",
-    bgPrimary: "#1A2E3E",
-    bgSecondary: "#2A3E52",
-    bgGradientTop: "#3A5A7E",
-    bgGradientBottom: "#1A2E3E",
-    seaDeep: "#2A4A6E",
-    seaMid: "#4A7A9E",
-    seaLight: "#6A9ABE",
-    sand: "#E8D4B8",
-    palm: "#7AB87A",
-    rock: "#8A9AAA",
-    accentSoft: "#E8A88A",
-    accentGlow: "#F0B8A0",
-    textPrimary: "#F5F7FF",
-    textSecondary: "#D8E5FF",
-    textMuted: "#A8C0E8",
-    cardBg: "#1F3345",
-    cardBorder: "rgba(255,255,255,0.1)",
-    cardShadow: "0 8px 24px rgba(0,0,0,0.4)",
-    particleColor: "rgba(150,180,255,0.15)",
-  },
-  alba: {
-    name: "alba",
-    bgPrimary: "#F8F5F0",
-    bgSecondary: "#EEE8E0",
-    bgGradientTop: "#D8E8F0",
-    bgGradientBottom: "#F8F5F0",
-    seaDeep: "#4A7A98",
-    seaMid: "#6A9ABB",
-    seaLight: "#8ABBDD",
-    sand: "#E0D0B8",
-    palm: "#7AA878",
-    rock: "#8A9AAA",
-    accentSoft: "#D89070",
-    accentGlow: "#E8A888",
-    textPrimary: "#2A3040",
-    textSecondary: "#4A5A70",
-    textMuted: "#7A8A9A",
-    cardBg: "#FFFEF8",
-    cardBorder: "rgba(0,0,0,0.08)",
-    cardShadow: "0 6px 20px rgba(0,0,0,0.06)",
-    particleColor: "rgba(150,150,150,0.08)",
-  },
-};
-
 // ========== AUTH PAGE COMPONENT ==========
 
 const AuthPage: React.FC<AuthPageProps> = ({ theme, onAuthSuccess }) => {
+  const { login, signup } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -78,38 +25,23 @@ const AuthPage: React.FC<AuthPageProps> = ({ theme, onAuthSuccess }) => {
     setLoading(true);
 
     try {
-      // Validazione base
       if (!email || !password) {
         setError("Email e password sono obbligatori");
-        setLoading(false);
         return;
       }
-
       if (password.length < 6) {
         setError("La password deve essere almeno 6 caratteri");
-        setLoading(false);
         return;
       }
 
-      // Simula una richiesta auth
-      const response = await authenticateUser({
-        email,
-        password,
-        mode,
-      });
-
-      if (response.success) {
-        if (response.token) {
-          localStorage.setItem("token", response.token);
-          localStorage.setItem("user", JSON.stringify({ email }));
-        }
-        onAuthSuccess();
+      if (mode === "login") {
+        await login(email, password);
       } else {
-        setError(response.error || "Errore durante l'autenticazione");
+        await signup(email, password);
       }
+      onAuthSuccess();
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Errore sconosciuto";
-      setError(errorMessage);
+      setError(err instanceof Error ? err.message : "Errore sconosciuto");
     } finally {
       setLoading(false);
     }
@@ -339,48 +271,5 @@ const AuthPage: React.FC<AuthPageProps> = ({ theme, onAuthSuccess }) => {
     </div>
   );
 };
-
-// ========== AUTH HELPER FUNCTION ==========
-
-async function authenticateUser(data: {
-  email: string;
-  password: string;
-  mode: "login" | "register";
-}): Promise<AuthResponse> {
-  try {
-    // Validazione
-    if (!data.email.includes("@")) {
-      return {
-        success: false,
-        error: "Email non valida",
-      };
-    }
-
-    if (data.password.length < 6) {
-      return {
-        success: false,
-        error: "Password troppo corta",
-      };
-    }
-
-    // Simula un delay di rete
-    await new Promise((resolve): void => {
-      setTimeout(resolve, 500);
-    });
-
-    // Simula successo
-    const mockToken = `token-${Date.now()}`;
-    return {
-      success: true,
-      token: mockToken,
-    };
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Errore sconosciuto";
-    return {
-      success: false,
-      error: errorMessage,
-    };
-  }
-}
 
 export default AuthPage;

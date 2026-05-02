@@ -10,11 +10,11 @@ import secrets
 
 from app.db.database import get_db
 from app.models.models import User
-from app.services.auth.auth_service import register_user, login_user
-from app.services.auth.auth_dependencies import get_current_user
-from app.services.auth.auth_tokens import create_access_token, create_refresh_token, verify_token
-from app.services.auth.auth_hashing import hash_password, verify_password
-from app.services.auth.auth_logger import logger
+from app.auth.auth_service import register_user, login_user
+from app.auth.auth_dependencies import get_current_user
+from app.auth.auth_tokens import create_access_token, create_refresh_token, verify_token
+from app.auth.auth_hashing import hash_password, verify_password
+from app.auth.auth_logger import logger
 
 
 # ══════════════════════════════════════════════════════════════

@@ -42,6 +42,17 @@ async def rate_limit_exceeded_handler(request, exc):
         },
     )
 
+def _get_cors_origins():
+    """Leggi CORS origins da env, con fallback per Vercel"""
+    cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
+
+    if os.getenv("VERCEL_URL"):
+        vercel_url = f"https://{os.getenv('VERCEL_URL')}"
+        if vercel_url not in cors_origins:
+            cors_origins.append(vercel_url)
+
+    return [origin.strip() for origin in cors_origins if origin.strip()]
+
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
@@ -50,18 +61,6 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
-
-def _get_cors_origins():
-    """Leggi CORS origins da env, con fallback per Vercel"""
-    cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
-    
-    # In produzione su Vercel, aggiungi il dominio automaticamente
-    if os.getenv("VERCEL_URL"):
-        vercel_url = f"https://{os.getenv('VERCEL_URL')}"
-        if vercel_url not in cors_origins:
-            cors_origins.append(vercel_url)
-    
-    return [origin.strip() for origin in cors_origins if origin.strip()]
 
 # Init DB on startup
 @app.on_event("startup")

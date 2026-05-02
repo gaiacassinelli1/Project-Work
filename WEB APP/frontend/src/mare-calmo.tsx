@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useAuth } from "./context/auth-context";
-import type { Theme, CheckInData, FishData, Bubble, SeaInfo } from "./types";
+import type { Theme, CheckInData, FishData, SeaInfo } from "./types";
 import { AnalyticsPage } from "./analytics-page";
+import AuthPage from "./pages/auth-page";
 
 const themes: Record<string, Theme> = {
   notte: {
@@ -403,18 +404,18 @@ const OnboardingPage: React.FC<{ theme: Theme; onComplete: () => void }> = ({ th
   );
 }
 
-function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics }: {
+function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics, isPlayingMusic }: {
   theme: Theme; fishData: FishData[]; seaState: number;
   onGoToIsland: () => void; onGoToProgress: () => void; onGoToAnalytics: () => void;
+  isPlayingMusic: boolean;
 }) {
-  const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [resetToken] = useState(() => Math.random());
-  
-  const musicURL = theme.name === "notte" 
+
+  const musicURL = theme.name === "notte"
     ? "/music/ambient night.mp3"
     : "/music/morning vibes.mp3";
-  
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.src = musicURL;
@@ -426,16 +427,6 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
     }
   }, [theme.name, musicURL, isPlayingMusic]);
   
-  const toggleMusic = () => {
-    if (isPlayingMusic) {
-      audioRef.current?.pause();
-    } else {
-      audioRef.current?.play().catch(() => console.log("Riproduzione bloccata"));
-    }
-    setIsPlayingMusic(!isPlayingMusic);
-  };
-  
-  const seaInfo = discretizeSea(seaState);
   const fishVisuals = useMemo(() => {
     const palette = [
       { body: "#C9968A", accent: "#DEB5A8" },
@@ -463,7 +454,7 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
 
       {/* Title + logo top-left */}
       <div style={{ position: "absolute", top: 12, left: 16, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-        <img src="/images/logo pw.png" alt="Logo" style={{ width: 160, height: 70, marginBottom: 16, filter: theme.name === "alba" ? "brightness(1)" : "brightness(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3))" }} />
+        <img src={theme.name === "notte" ? "/images/logo_chiaro.png" : "/images/logo_scuro.png"} alt="Logo" style={{ width: 160, height: 70, marginBottom: 16 }} />
         <div style={{ display: "flex", alignItems: "center", gap: 0, fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 13, color: theme.name === "alba" ? theme.textPrimary : theme.textSecondary, letterSpacing: 1.5, fontWeight: 500, textShadow: "0 1px 6px rgba(0,0,0,0.3)" }}>
           <span>Respira</span>
           <span style={{ margin: "0 10px", fontSize: 6, opacity: 0.5, lineHeight: 1 }}>●</span>
@@ -574,16 +565,6 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
           Questa app non sostituisce un professionista della salute mentale. Se senti di aver bisogno di supporto, parlane con qualcuno di cui ti fidi.
         </p>
       </div>
-      
-      {/* Bottone musica */}
-      <button onClick={toggleMusic} style={{
-        position: "fixed", top: 20, right: 70, zIndex: 50, width: 40, height: 40, borderRadius: "50%",
-        border: `1px solid ${theme.cardBorder}`, background: `${theme.cardBg}cc`, backdropFilter: "blur(10px)",
-        display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 18,
-        transition: "all 0.4s ease",
-      }} title={isPlayingMusic ? "Spegni musica" : "Accendi musica"}>
-        {isPlayingMusic ? "♫" : "♪"}
-      </button>
       
     </div>
   );
@@ -868,9 +849,11 @@ const ProgressPage: React.FC<{ theme: Theme; checkIns: CheckInData[]; fishData: 
 
 // MAIN APP
 const App: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
   const [themeName, setThemeName] = useState("notte");
   const [page, setPage] = useState("onboarding");
+  const [isPlayingMusic, setIsPlayingMusic] = useState(false);
+  const toggleMusic = useCallback(() => setIsPlayingMusic(v => !v), []);
   const [checkIns, setCheckIns] = useState<CheckInData[]>([]);
   const [lastCheckIn, setLastCheckIn] = useState<CheckInData | null>(null);
   const [fishData, setFishData] = useState<FishData[]>([
@@ -905,6 +888,18 @@ const App: React.FC = () => {
     setSeaState(smoothedSea);
     setPage("support");
   }, [checkIns, fishData, seaState]);
+
+  if (authLoading) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: themes.notte.bgPrimary }}>
+        <span style={{ color: themes.notte.textMuted, fontFamily: "'Century Gothic', sans-serif", fontSize: 14 }}>...</span>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage theme={theme} onAuthSuccess={() => {}} />;
+  }
 
   return (
     <div style={{ position: "relative" }}>
@@ -949,17 +944,29 @@ const App: React.FC = () => {
             width: 40, height: 40, borderRadius: "50%",
             border: `1px solid ${theme.cardBorder}`, background: `${theme.cardBg}cc`, backdropFilter: "blur(10px)",
             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16,
-            transition: "all 0.4s ease",
-          }} title="Logout">
-            ⊗
+            color: theme.textPrimary, transition: "all 0.4s ease",
+          }} title="Chiudi sessione">
+            🔒
           </button>
+
+          {/* Button musica (solo sulla pagina mare) */}
+          {page === "sea" && (
+            <button onClick={toggleMusic} style={{
+              width: 40, height: 40, borderRadius: "50%",
+              border: `1px solid ${theme.cardBorder}`, background: `${theme.cardBg}cc`, backdropFilter: "blur(10px)",
+              display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 18,
+              color: theme.textPrimary, transition: "all 0.4s ease",
+            }} title={isPlayingMusic ? "Spegni musica" : "Accendi musica"}>
+              {isPlayingMusic ? "♫" : "♪"}
+            </button>
+          )}
 
           {/* Button tema */}
           <button onClick={() => setThemeName(themeName === "notte" ? "alba" : "notte")} style={{
             width: 40, height: 40, borderRadius: "50%",
             border: `1px solid ${theme.cardBorder}`, background: `${theme.cardBg}cc`, backdropFilter: "blur(10px)",
             display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 18,
-            transition: "all 0.4s ease",
+            color: theme.textPrimary, transition: "all 0.4s ease",
           }} title={themeName === "notte" ? "Passa all'alba" : "Passa alla notte"}>
             {themeName === "notte" ? "◐" : "◑"}
           </button>
@@ -967,7 +974,7 @@ const App: React.FC = () => {
       )}
 
       {page === "onboarding" && <OnboardingPage theme={theme} onComplete={goBackToSea} />}
-      {page === "sea" && <SeaPage key={seaKey} theme={theme} fishData={fishData} seaState={seaState} onGoToIsland={() => setPage("island")} onGoToProgress={() => setPage("progress")} onGoToAnalytics={() => setPage("analytics")} />}
+      {page === "sea" && <SeaPage key={seaKey} theme={theme} fishData={fishData} seaState={seaState} onGoToIsland={() => setPage("island")} onGoToProgress={() => setPage("progress")} onGoToAnalytics={() => setPage("analytics")} isPlayingMusic={isPlayingMusic} />}
       {page === "island" && <IslandPage theme={theme} onSubmit={handleCheckIn} onBack={goBackToSea} dayCount={checkIns.length} />}
       {page === "support" && lastCheckIn && <SupportPage theme={theme} checkInData={lastCheckIn} onReturn={goBackToSea} />}
       {page === "progress" && <ProgressPage theme={theme} checkIns={checkIns} fishData={fishData} seaState={seaState} onBack={goBackToSea} />}
