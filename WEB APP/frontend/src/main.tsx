@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./mare-calmo";
-import { AuthProvider } from "./auth-context-FIXED";
+import { AuthProvider } from "./context/auth-context";
 import "./index.css";
 
 // Verifica che root element esista

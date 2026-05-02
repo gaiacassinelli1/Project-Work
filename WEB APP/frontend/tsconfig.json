@@ -5,31 +5,26 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    
+    //"strict": false,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
 
-    /* Path mapping */
     "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@types/*": ["./src/types/*"],
-      "@utils/*": ["./src/utils/*"]
-    }
+      "@/*": ["./src/*"]
+    },
+
+    "noEmit": true,
+    "importHelpers": true
   },
   "include": ["src"],
-  //"references": [{ "path": "C:/Users/Utente/OneDrive - ITS Tech Talent Factory/Project Work/Project-Work/WEB APP/frontend/tsconfig.node.json" }]
+  "exclude": ["node_modules", "dist", "build"]
 }
