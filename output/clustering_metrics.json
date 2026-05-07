@@ -1,0 +1,16 @@
+{
+  "k_ottimale": 2,
+  "silhouette": 0.4008,
+  "calinski_harabasz": 74.55,
+  "davies_bouldin": 0.9475,
+  "cluster_profiles": {
+    "0": "Ansiosi Evitanti",
+    "1": "Profilo Intermedio"
+  },
+  "cluster_sizes": {
+    "Profilo Intermedio": 53,
+    "Ansiosi Evitanti": 29
+  },
+  "bootstrap_sil_mean": 0.4123,
+  "bootstrap_sil_std": 0.0331
+}

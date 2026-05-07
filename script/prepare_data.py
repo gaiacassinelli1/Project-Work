@@ -60,22 +60,22 @@ def _load_clean() -> pd.DataFrame:
 
 def _add_indices(df: pd.DataFrame) -> pd.DataFrame:
     # Indici principali
-    df["ansia_prestazione"]     = df[["Item_1","Item_2","Item_3","Item_4","Item_6","Item_11","Item_20","Item_21"]].mean(axis=1)
-    df["ansia_accademica"]      = df[["Item_7","Item_8","Item_9","Item_10"]].mean(axis=1)
-    df["ansia_lavorativa"]      = df[["Item_12","Item_13","Item_14","Item_15"]].mean(axis=1)
-    df["perfezionismo"]         = df[["Item_16","Item_17","Item_18","Item_19"]].mean(axis=1)
-    df["impatto_ansia"]         = df[["Item_5","Item_22","Item_27","Item_28","Item_29"]].mean(axis=1)
-    df["coping"]                = df[["Item_23","Item_24","Item_25","Item_26"]].mean(axis=1)
+    df["ansia_prestazione"]     = df[["Item_1","Item_2","Item_3","Item_4","Item_6","Item_11","Item_20","Item_21"]].mean(axis=1, skipna=True)
+    df["ansia_accademica"]      = df[["Item_7","Item_8","Item_9","Item_10"]].mean(axis=1, skipna=True)
+    df["ansia_lavorativa"]      = df[["Item_12","Item_13","Item_14","Item_15"]].mean(axis=1, skipna=True)
+    df["perfezionismo"]         = df[["Item_16","Item_17","Item_18","Item_19"]].mean(axis=1, skipna=False)
+    df["impatto_ansia"]         = df[["Item_5","Item_22","Item_27","Item_28","Item_29"]].mean(axis=1, skipna=False)
+    df["coping"]                = df[["Item_23","Item_24","Item_25","Item_26"]].mean(axis=1, skipna=False)
 
     # Ansia totale (alias usato in clustering)
-    df["ansia"]       = df[["ansia_prestazione","ansia_accademica","ansia_lavorativa"]].mean(axis=1)
+    df["ansia"]       = df[["ansia_prestazione","ansia_accademica","ansia_lavorativa"]].mean(axis=1, skipna=False)
 
     # Indici derivati
     df["vulnerabilita"]         = (df["perfezionismo"] + df["ansia"]) / 2
     df["resilienza"]            = df["coping"] - df["ansia"]
     df["gap"]                   = df["Item_8"] - df["coping"]
-    df["evitamento"]            = df[["Item_10","Item_15","Item_27","Item_28"]].mean(axis=1)
-    df["intensita_sintomatica"] = df[["Item_20","Item_21","Item_22"]].mean(axis=1)
+    df["evitamento"]            = df[["Item_10","Item_15","Item_27","Item_28"]].mean(axis=1, skipna=False)
+    df["intensita_sintomatica"] = df[["Item_20","Item_21","Item_22"]].mean(axis=1, skipna=False)
 
     return df
 
