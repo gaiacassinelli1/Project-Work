@@ -1,0 +1,577 @@
+{
+  "k_ottimale": 2,
+  "silhouette": 0.4008,
+  "calinski_harabasz": 74.55,
+  "davies_bouldin": 0.9475,
+  "cluster_profiles": {
+    "0": "Ansiosi Evitanti",
+    "1": "Profilo Intermedio"
+  },
+  "cluster_sizes": {
+    "Profilo Intermedio": 53,
+    "Ansiosi Evitanti": 29
+  },
+  "bootstrap_sil_mean": 0.4141,
+  "bootstrap_sil_std": 0.0337,
+  "feature_importance": {
+    "evitamento": 0.2651,
+    "impatto_ansia": 0.2546,
+    "ansia": 0.1907,
+    "resilienza": 0.1499,
+    "intensita_sintomatica": 0.0874,
+    "coping": 0.0331,
+    "perfezionismo": 0.0192
+  },
+  "centroids_z": {
+    "0": {
+      "ansia": 1.014,
+      "coping": -0.701,
+      "evitamento": 1.084,
+      "resilienza": -1.0,
+      "perfezionismo": 0.667,
+      "impatto_ansia": 1.038,
+      "intensita_sintomatica": 0.938
+    },
+    "1": {
+      "ansia": -0.555,
+      "coping": 0.383,
+      "evitamento": -0.593,
+      "resilienza": 0.547,
+      "perfezionismo": -0.365,
+      "impatto_ansia": -0.568,
+      "intensita_sintomatica": -0.513
+    }
+  },
+  "cluster_assignments": [
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Profilo Intermedio"
+    }
+  ],
+  "cluster_summary": {
+    "Ansiosi Evitanti": {
+      "ansia": 3.691,
+      "coping": 2.474,
+      "evitamento": 3.526,
+      "resilienza": -1.217,
+      "perfezionismo": 3.819,
+      "impatto_ansia": 4.055,
+      "intensita_sintomatica": 3.885
+    },
+    "Profilo Intermedio": {
+      "ansia": 2.379,
+      "coping": 3.33,
+      "evitamento": 1.742,
+      "resilienza": 0.951,
+      "perfezionismo": 2.759,
+      "impatto_ansia": 2.611,
+      "intensita_sintomatica": 2.358
+    }
+  },
+  "feature_distributions": {
+    "ansia": {
+      "Ansiosi Evitanti": {
+        "count": 29.0,
+        "mean": 3.691,
+        "std": 0.569,
+        "min": 2.429,
+        "25%": 3.232,
+        "50%": 3.75,
+        "75%": 4.107,
+        "max": 4.607
+      },
+      "Profilo Intermedio": {
+        "count": 53.0,
+        "mean": 2.379,
+        "std": 0.543,
+        "min": 1.214,
+        "25%": 1.958,
+        "50%": 2.429,
+        "75%": 2.75,
+        "max": 3.589
+      }
+    },
+    "coping": {
+      "Ansiosi Evitanti": {
+        "count": 29.0,
+        "mean": 2.474,
+        "std": 0.724,
+        "min": 1.25,
+        "25%": 2.0,
+        "50%": 2.5,
+        "75%": 2.75,
+        "max": 3.75
+      },
+      "Profilo Intermedio": {
+        "count": 53.0,
+        "mean": 3.33,
+        "std": 0.652,
+        "min": 1.5,
+        "25%": 3.0,
+        "50%": 3.25,
+        "75%": 3.75,
+        "max": 4.75
+      }
+    },
+    "evitamento": {
+      "Ansiosi Evitanti": {
+        "count": 29.0,
+        "mean": 3.526,
+        "std": 0.819,
+        "min": 1.0,
+        "25%": 3.0,
+        "50%": 3.667,
+        "75%": 4.25,
+        "max": 4.667
+      },
+      "Profilo Intermedio": {
+        "count": 53.0,
+        "mean": 1.742,
+        "std": 0.504,
+        "min": 1.0,
+        "25%": 1.333,
+        "50%": 1.667,
+        "75%": 2.0,
+        "max": 3.0
+      }
+    },
+    "resilienza": {
+      "Ansiosi Evitanti": {
+        "count": 29.0,
+        "mean": -1.217,
+        "std": 1.179,
+        "min": -3.167,
+        "25%": -1.786,
+        "50%": -1.125,
+        "75%": -0.75,
+        "max": 1.071
+      },
+      "Profilo Intermedio": {
+        "count": 53.0,
+        "mean": 0.951,
+        "std": 0.785,
+        "min": -0.929,
+        "25%": 0.464,
+        "50%": 0.821,
+        "75%": 1.417,
+        "max": 2.768
+      }
+    },
+    "perfezionismo": {
+      "Ansiosi Evitanti": {
+        "count": 29.0,
+        "mean": 3.819,
+        "std": 0.79,
+        "min": 2.0,
+        "25%": 3.5,
+        "50%": 3.75,
+        "75%": 4.25,
+        "max": 5.0
+      },
+      "Profilo Intermedio": {
+        "count": 53.0,
+        "mean": 2.759,
+        "std": 0.949,
+        "min": 1.0,
+        "25%": 2.0,
+        "50%": 2.75,
+        "75%": 3.5,
+        "max": 5.0
+      }
+    },
+    "impatto_ansia": {
+      "Ansiosi Evitanti": {
+        "count": 29.0,
+        "mean": 4.055,
+        "std": 0.54,
+        "min": 3.0,
+        "25%": 3.8,
+        "50%": 4.0,
+        "75%": 4.6,
+        "max": 5.0
+      },
+      "Profilo Intermedio": {
+        "count": 53.0,
+        "mean": 2.611,
+        "std": 0.591,
+        "min": 1.2,
+        "25%": 2.2,
+        "50%": 2.8,
+        "75%": 3.0,
+        "max": 3.6
+      }
+    },
+    "intensita_sintomatica": {
+      "Ansiosi Evitanti": {
+        "count": 29.0,
+        "mean": 3.885,
+        "std": 0.793,
+        "min": 1.667,
+        "25%": 3.333,
+        "50%": 4.0,
+        "75%": 4.667,
+        "max": 5.0
+      },
+      "Profilo Intermedio": {
+        "count": 53.0,
+        "mean": 2.358,
+        "std": 0.739,
+        "min": 1.0,
+        "25%": 2.0,
+        "50%": 2.333,
+        "75%": 2.667,
+        "max": 3.667
+      }
+    }
+  },
+  "additional_info": {
+    "n_samples": 82,
+    "n_features": 7,
+    "timestamp": "20260510_132133"
+  },
+  "interpretation": {
+    "cluster_0": "Ansiosi Evitanti: alto ansia, evitamento, basso coping",
+    "cluster_1": "Resilienti: alto coping e resilienza, basso ansia",
+    "cluster_2": "Ansiosi Perfezionisti: alto ansia e perfezionismo, basso coping",
+    "cluster_3": "Profilo Intermedio: nessun indice particolarmente alto o basso"
+  },
+  "interpretation_notes": "I nomi dei cluster sono assegnati in base agli z-score dei centroidi rispetto alla media globale. La soglia di 0.4 è stata scelta per evidenziare differenze significative rispetto alla media, ma è un criterio interpretativo e non una regola fissa.",
+  "metrics_interpretation": {
+    "silhouette": "Valore tra -1 e 1 che misura la coessione interna e la separazione tra cluster. Più alto è meglio (vicino a 1 indica cluster ben definiti).",
+    "calinski_harabasz": "Rapporto tra varianza inter-cluster e varianza intra-cluster. Più alto è meglio, indica cluster più densi e ben separati.",
+    "davies_bouldin": "Media del rapporto tra la somma delle deviazioni intra-cluster e la distanza inter-cluster. Più basso è meglio, indica cluster più distinti e meno sovrapposti.",
+    "bootstrap_silhouette": "La distribuzione dei silhouette score ottenuti da campionamenti bootstrap fornisce una stima della stabilità del clustering. Una media alta e una deviazione standard bassa indicano risultati più affidabili.",
+    "feature_importance": "Le feature più importanti per predire il cluster indicano quali indici psicologici sono più discriminanti tra i profili identificati.",
+    "centroids_z": "I valori z-score dei centroidi indicano quanto ogni indice è sopra o sotto la media globale per ciascun cluster, aiutando a interpretare i profili psicologici associati."
+  },
+  "questions_for_future_analysis": [
+    "Come si evolvono questi cluster nel tempo? Sarebbe interessante un'analisi longitudinale.",
+    "Qual è la relazione tra questi profili e variabili esterne come il benessere generale, la qualità della vita o la risposta a interventi psicologici?",
+    "Esistono sottogruppi all'interno dei cluster principali che potrebbero essere identificati con tecniche di clustering più sofisticate o con un numero maggiore di cluster?",
+    "Come si comportano questi cluster in un campione più ampio o in popolazioni diverse (es. diverse fasce d'età, contesti culturali, ecc.)?"
+  ]
+}
