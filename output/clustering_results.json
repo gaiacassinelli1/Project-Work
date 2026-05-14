@@ -11,8 +11,8 @@
     "Profilo Intermedio": 53,
     "Ansiosi Evitanti": 29
   },
-  "bootstrap_sil_mean": 0.4141,
-  "bootstrap_sil_std": 0.0337,
+  "bootstrap_sil_mean": 0.4137,
+  "bootstrap_sil_std": 0.0306,
   "feature_importance": {
     "evitamento": 0.2651,
     "impatto_ansia": 0.2546,
@@ -551,7 +551,7 @@
   "additional_info": {
     "n_samples": 82,
     "n_features": 7,
-    "timestamp": "20260510_132133"
+    "timestamp": "20260512_210217"
   },
   "interpretation": {
     "cluster_0": "Ansiosi Evitanti: alto ansia, evitamento, basso coping",
