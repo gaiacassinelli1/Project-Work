@@ -5,12 +5,12 @@
   "davies_bouldin": 0.9475,
   "cluster_profiles": {
     "0": "Ansiosi Evitanti",
-    "1": "Profilo Intermedio"
+    "1": "Adattivi"
   },
   "cluster_sizes": {
-    "Profilo Intermedio": 53,
+    "Adattivi": 53,
     "Ansiosi Evitanti": 29
   },
-  "bootstrap_sil_mean": 0.4214,
-  "bootstrap_sil_std": 0.0377
+  "bootstrap_sil_mean": 0.417,
+  "bootstrap_sil_std": 0.0339
 }

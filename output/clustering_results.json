@@ -5,14 +5,14 @@
   "davies_bouldin": 0.9475,
   "cluster_profiles": {
     "0": "Ansiosi Evitanti",
-    "1": "Profilo Intermedio"
+    "1": "Adattivi"
   },
   "cluster_sizes": {
-    "Profilo Intermedio": 53,
+    "Adattivi": 53,
     "Ansiosi Evitanti": 29
   },
-  "bootstrap_sil_mean": 0.4214,
-  "bootstrap_sil_std": 0.0377,
+  "bootstrap_sil_mean": 0.417,
+  "bootstrap_sil_std": 0.0339,
   "feature_importance": {
     "evitamento": 0.2651,
     "impatto_ansia": 0.2546,
@@ -53,15 +53,15 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -77,7 +77,7 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -85,7 +85,7 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -93,19 +93,19 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -113,31 +113,7 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -149,79 +125,19 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -233,11 +149,19 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -245,43 +169,27 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -289,23 +197,15 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
-    },
-    {
-      "cluster_id": 0,
-      "cluster_nome": "Ansiosi Evitanti"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -313,7 +213,15 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
     },
     {
       "cluster_id": 0,
@@ -325,11 +233,11 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 0,
@@ -337,23 +245,11 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
-    },
-    {
-      "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
     },
     {
       "cluster_id": 0,
@@ -361,18 +257,131 @@
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
     },
     {
       "cluster_id": 1,
-      "cluster_nome": "Profilo Intermedio"
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 0,
+      "cluster_nome": "Ansiosi Evitanti"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
+    },
+    {
+      "cluster_id": 1,
+      "cluster_nome": "Adattivi"
     }
   ],
   "cluster_summary": {
+    "Adattivi": {
+      "ansia": 2.379,
+      "coping": 3.33,
+      "evitamento": 1.742,
+      "resilienza": 0.951,
+      "perfezionismo": 2.759,
+      "impatto_ansia": 2.611,
+      "intensita_sintomatica": 2.358
+    },
     "Ansiosi Evitanti": {
       "ansia": 3.691,
       "coping": 2.474,
@@ -381,19 +390,20 @@
       "perfezionismo": 3.819,
       "impatto_ansia": 4.055,
       "intensita_sintomatica": 3.885
-    },
-    "Profilo Intermedio": {
-      "ansia": 2.379,
-      "coping": 3.33,
-      "evitamento": 1.742,
-      "resilienza": 0.951,
-      "perfezionismo": 2.759,
-      "impatto_ansia": 2.611,
-      "intensita_sintomatica": 2.358
     }
   },
   "feature_distributions": {
     "ansia": {
+      "Adattivi": {
+        "count": 53.0,
+        "mean": 2.379,
+        "std": 0.543,
+        "min": 1.214,
+        "25%": 1.958,
+        "50%": 2.429,
+        "75%": 2.75,
+        "max": 3.589
+      },
       "Ansiosi Evitanti": {
         "count": 29.0,
         "mean": 3.691,
@@ -403,19 +413,19 @@
         "50%": 3.75,
         "75%": 4.107,
         "max": 4.607
-      },
-      "Profilo Intermedio": {
-        "count": 53.0,
-        "mean": 2.379,
-        "std": 0.543,
-        "min": 1.214,
-        "25%": 1.958,
-        "50%": 2.429,
-        "75%": 2.75,
-        "max": 3.589
       }
     },
     "coping": {
+      "Adattivi": {
+        "count": 53.0,
+        "mean": 3.33,
+        "std": 0.652,
+        "min": 1.5,
+        "25%": 3.0,
+        "50%": 3.25,
+        "75%": 3.75,
+        "max": 4.75
+      },
       "Ansiosi Evitanti": {
         "count": 29.0,
         "mean": 2.474,
@@ -425,19 +435,19 @@
         "50%": 2.5,
         "75%": 2.75,
         "max": 3.75
-      },
-      "Profilo Intermedio": {
-        "count": 53.0,
-        "mean": 3.33,
-        "std": 0.652,
-        "min": 1.5,
-        "25%": 3.0,
-        "50%": 3.25,
-        "75%": 3.75,
-        "max": 4.75
       }
     },
     "evitamento": {
+      "Adattivi": {
+        "count": 53.0,
+        "mean": 1.742,
+        "std": 0.504,
+        "min": 1.0,
+        "25%": 1.333,
+        "50%": 1.667,
+        "75%": 2.0,
+        "max": 3.0
+      },
       "Ansiosi Evitanti": {
         "count": 29.0,
         "mean": 3.526,
@@ -447,19 +457,19 @@
         "50%": 3.667,
         "75%": 4.25,
         "max": 4.667
-      },
-      "Profilo Intermedio": {
-        "count": 53.0,
-        "mean": 1.742,
-        "std": 0.504,
-        "min": 1.0,
-        "25%": 1.333,
-        "50%": 1.667,
-        "75%": 2.0,
-        "max": 3.0
       }
     },
     "resilienza": {
+      "Adattivi": {
+        "count": 53.0,
+        "mean": 0.951,
+        "std": 0.785,
+        "min": -0.929,
+        "25%": 0.464,
+        "50%": 0.821,
+        "75%": 1.417,
+        "max": 2.768
+      },
       "Ansiosi Evitanti": {
         "count": 29.0,
         "mean": -1.217,
@@ -469,19 +479,19 @@
         "50%": -1.125,
         "75%": -0.75,
         "max": 1.071
-      },
-      "Profilo Intermedio": {
-        "count": 53.0,
-        "mean": 0.951,
-        "std": 0.785,
-        "min": -0.929,
-        "25%": 0.464,
-        "50%": 0.821,
-        "75%": 1.417,
-        "max": 2.768
       }
     },
     "perfezionismo": {
+      "Adattivi": {
+        "count": 53.0,
+        "mean": 2.759,
+        "std": 0.949,
+        "min": 1.0,
+        "25%": 2.0,
+        "50%": 2.75,
+        "75%": 3.5,
+        "max": 5.0
+      },
       "Ansiosi Evitanti": {
         "count": 29.0,
         "mean": 3.819,
@@ -491,19 +501,19 @@
         "50%": 3.75,
         "75%": 4.25,
         "max": 5.0
-      },
-      "Profilo Intermedio": {
-        "count": 53.0,
-        "mean": 2.759,
-        "std": 0.949,
-        "min": 1.0,
-        "25%": 2.0,
-        "50%": 2.75,
-        "75%": 3.5,
-        "max": 5.0
       }
     },
     "impatto_ansia": {
+      "Adattivi": {
+        "count": 53.0,
+        "mean": 2.611,
+        "std": 0.591,
+        "min": 1.2,
+        "25%": 2.2,
+        "50%": 2.8,
+        "75%": 3.0,
+        "max": 3.6
+      },
       "Ansiosi Evitanti": {
         "count": 29.0,
         "mean": 4.055,
@@ -513,19 +523,19 @@
         "50%": 4.0,
         "75%": 4.6,
         "max": 5.0
-      },
-      "Profilo Intermedio": {
-        "count": 53.0,
-        "mean": 2.611,
-        "std": 0.591,
-        "min": 1.2,
-        "25%": 2.2,
-        "50%": 2.8,
-        "75%": 3.0,
-        "max": 3.6
       }
     },
     "intensita_sintomatica": {
+      "Adattivi": {
+        "count": 53.0,
+        "mean": 2.358,
+        "std": 0.739,
+        "min": 1.0,
+        "25%": 2.0,
+        "50%": 2.333,
+        "75%": 2.667,
+        "max": 3.667
+      },
       "Ansiosi Evitanti": {
         "count": 29.0,
         "mean": 3.885,
@@ -535,23 +545,13 @@
         "50%": 4.0,
         "75%": 4.667,
         "max": 5.0
-      },
-      "Profilo Intermedio": {
-        "count": 53.0,
-        "mean": 2.358,
-        "std": 0.739,
-        "min": 1.0,
-        "25%": 2.0,
-        "50%": 2.333,
-        "75%": 2.667,
-        "max": 3.667
       }
     }
   },
   "additional_info": {
     "n_samples": 82,
     "n_features": 7,
-    "timestamp": "20260515_102702"
+    "timestamp": "20260515_201440"
   },
   "interpretation": {
     "cluster_0": "Ansiosi Evitanti: alto ansia, evitamento, basso coping",
