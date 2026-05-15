@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useAuth } from "./context/auth-context";
 import type { Theme, CheckInData, FishData, SeaInfo } from "./types";
-import { AnalyticsPage } from "./analytics-page";
 import AuthPage from "./pages/auth-page";
 
 const themes: Record<string, Theme> = {
@@ -404,9 +403,9 @@ const OnboardingPage: React.FC<{ theme: Theme; onComplete: () => void }> = ({ th
   );
 }
 
-function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGoToAnalytics, isPlayingMusic }: {
+function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, isPlayingMusic }: {
   theme: Theme; fishData: FishData[]; seaState: number;
-  onGoToIsland: () => void; onGoToProgress: () => void; onGoToAnalytics: () => void;
+  onGoToIsland: () => void; onGoToProgress: () => void;
   isPlayingMusic: boolean;
 }) {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -466,7 +465,7 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
 
       {/* ORIZZONTE button centered + mantra below */}
       <div style={{ position: "absolute", top: 72, left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", zIndex: 15 }}>
-        <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+        <div style={{ marginBottom: 16 }}>
           <button onClick={onGoToProgress} style={{
             background: `${theme.cardBg}33`, border: `1px solid ${theme.textMuted}30`,
             borderRadius: 50, padding: "8px 24px", color: theme.textPrimary,
@@ -475,15 +474,6 @@ function SeaPage({ theme, fishData, seaState, onGoToIsland, onGoToProgress, onGo
             textShadow: "0 1px 6px rgba(0,0,0,0.3)",
           }}>
             Orizzonte
-          </button>
-          <button onClick={onGoToAnalytics} style={{
-            background: `${theme.cardBg}33`, border: `1px solid ${theme.textMuted}30`,
-            borderRadius: 50, padding: "8px 24px", color: theme.textPrimary,
-            fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 13, fontWeight: 500,
-            cursor: "pointer", backdropFilter: "blur(12px)", transition: "all 0.3s ease",
-            textShadow: "0 1px 6px rgba(0,0,0,0.3)",
-          }}>
-            Analisi
           </button>
         </div>
         <h1 style={{ fontFamily: "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif", fontSize: 20, fontWeight: 600, color: theme.textPrimary, margin: 0, textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
@@ -974,11 +964,10 @@ const App: React.FC = () => {
       )}
 
       {page === "onboarding" && <OnboardingPage theme={theme} onComplete={goBackToSea} />}
-      {page === "sea" && <SeaPage key={seaKey} theme={theme} fishData={fishData} seaState={seaState} onGoToIsland={() => setPage("island")} onGoToProgress={() => setPage("progress")} onGoToAnalytics={() => setPage("analytics")} isPlayingMusic={isPlayingMusic} />}
+      {page === "sea" && <SeaPage key={seaKey} theme={theme} fishData={fishData} seaState={seaState} onGoToIsland={() => setPage("island")} onGoToProgress={() => setPage("progress")} isPlayingMusic={isPlayingMusic} />}
       {page === "island" && <IslandPage theme={theme} onSubmit={handleCheckIn} onBack={goBackToSea} dayCount={checkIns.length} />}
       {page === "support" && lastCheckIn && <SupportPage theme={theme} checkInData={lastCheckIn} onReturn={goBackToSea} />}
       {page === "progress" && <ProgressPage theme={theme} checkIns={checkIns} fishData={fishData} seaState={seaState} onBack={goBackToSea} />}
-      {page === "analytics" && <AnalyticsPage theme={theme} onBack={() => { setSeaKey(k => k + 1); setPage("sea"); }} />}
     </div>
   );
 }
