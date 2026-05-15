@@ -1,3 +1,7 @@
+# Large model files
+*.bin
+*.bin.gz
+
 # Environment variables
 .env
 .env.local
